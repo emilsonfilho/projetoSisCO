@@ -1,0 +1,35 @@
+div.body-form > form > button#concluir:hover::before {
+	content: 'Concluir';
+	display: flex;
+	align-content: center;
+	justify-content: center;
+}
+
+div.body-form > form > button#editar:hover::before {
+	content: 'Editar';
+	display: flex;
+	align-content: center;
+	justify-content: center;
+}
+
+div.body-form > form > button.view:hover::before {
+	content: 'Visualizar';
+	display: flex;
+	align-content: center;
+	justify-content: center;
+}
+
+div.body-form > form > button#cadastrar:hover::before {
+	content: 'Cadastrar';
+	display: flex;
+	align-content: center;
+	justify-content: center;
+}
+
+div.body-form > form > button#novocurso:hover::before {
+	content: 'Novo Curso';
+	display: flex;
+	align-content: center;
+	justify-content: center;
+}
+
