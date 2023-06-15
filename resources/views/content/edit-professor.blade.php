@@ -5,7 +5,7 @@
 @section('content')
 <div class="bloco cad edicao">
    
-        <div class="header">
+        <div class="header btn-voltar">
             <h1>Editando: <span>{{ $nome }}</span></h1>
             <a href="/professores"><img src="/img/btnvoltar.svg" alt=""></a>
         </div>

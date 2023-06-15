@@ -11,98 +11,39 @@ use Illuminate\Support\Facades\DB;
 class ControllerProfessores extends Controller
 {
 
-    public function index() {
-        $corpoDocente = User::all();
+    public function index()
+    {
+        // $corpoDocente = User::orderBy('nome_user', 'asc')->get();
+        $colaboradores = DB::table('tb_jmf_colaborador')->orderBy('colaborador_nome', 'asc')->get();
+        $colaboradores = DB::table('tb_jmf_colaborador')
+            ->orderByRaw("CASE
+                WHEN colaborador_idSetor = 3 THEN 1
+                WHEN colaborador_idSetor = 2 THEN 2
+                WHEN colaborador_idSetor = 1 THEN 3
+                WHEN colaborador_idSetor = 4 THEN 4
+                ELSE 5
+                END")
+            ->orderBy('colaborador_nome', 'asc')
+            ->get();
 
-        return view('content.dashboard-professores', ['corpoDocente' => $corpoDocente]);
-    }
+        $getSetor = function ($colaborador) {
+            // Olha... eu estou pegando o setor, mas o recomendavel e'que na tabela de Colaborador tivesse o código da Função e não do Setor, pois o setor não tem uma chave estrangeira
+            $idSetor = $colaborador->colaborador_idSetor;
+            $nomeSetor = DB::table('tb_jmf_setor')->select('setor_nome')->where('setor_id', $idSetor)->first()->setor_nome;
 
-    public function store(Request $request) {
-        $professor = new User;
-        $escola = Escola::findOrFail(1);
+            // $usuarios = DB::table('tb_jmf_colaborador')
+            //     ->join('tb_jmf_setor', 'tb_jmf_colaborador.colaborador_idSetor', '=', 'tb_jmf_setor.setor_id')
+            //     ->join('tb_jmf_funcao', 'setor.funcao_id', '=', 'funcao.id')
+            //     ->select('tb_jmf_colaborador.*', 'funcao.nome as nome_funcao')
+            //     ->get();
 
-        $professor->nome_user = mb_strtoupper($request->nome, 'UTF-8'); 
-        $professor->email_user = $request->email;
-        $professor->password = md5(base64_encode($request->senha));
+            return $nomeSetor;
+        };
 
-        // if ($request->hasFile('foto')) {
-        //     if($request->file('foto')->isValid()) {
-        //         $requestImage = $request->foto;
-        //         $extension = $requestImage->extension();
-        //         $imageName = md5($requestImage->getClientOriginalName() . strtotime('now') . '.' . $extension);
-        //         $requestImage->move(public_path('img/users'), $imageName);
-        //         $professor->img_user = $imageName;
-        //     }
-        // } else {
-        //     $professor->img_user = "siscoUser.png";
-        // }
-
-        // Colocar uma solução para que a pessoa seja a validação seja antes do dia atual ou do ano atual 
-        $professor->dataN_user = $request->dataN;
-
-        $professor->tipo_user = 'PROFESSOR';
-        $professor->tel_user = $request->tel;
-        $professor->escola_id = $escola->id;
-
-        $professor->save(); 
-
-        return redirect('/professores')->with('msg', 'Professor cadastrado com sucesso.');
-    }
-
-    public function edit($id) {
-        // $user = User::where('id', $id)->first();
-        $user = User::findOrFail($id);
-        $nome = $user->nome_user;
-        $email = $user->email_user;
-        // $img = $user->img_user;
-        $dataN = $user->dataN_user;
-        $tipo = $user->tipo_user;
-        $tel = $user->tel_user;
-        
-        return view('content.edit-professor', [
-            'nome' => $nome, 
-            'email' => $email, 
-            // 'img' => $img, 
-            'dataN' => $dataN, 
-            'tipo' => $tipo, 
-            'tel' => $tel,
-            'id' => $id
+        return view('content.dashboard-professores', [
+            'colaboradores' => $colaboradores,
+            'tipoUser' => auth()->user()->tipo_user,
+            'getSetor' => $getSetor
         ]);
-    }
-
-    public function destroy($id) {
-        try {
-            $novoCoordenador = User::where('nome_user', 'Coordenador excluído do sistema')->first();
-            $idNovoCoordenador = $novoCoordenador->id;
-            DB::table('ocorrencias')->where('users_id', $id)->update(['users_id' => $idNovoCoordenador]);
-            User::findOrFail($id)->delete();
-
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            throw new Error('Usuário não encontrado');        }
-        
-        return redirect('/professores')->with('msg', 'Usuário removido com sucesso.');
-    }
-
-    public function update($id, Request $request) {
-        try { 
-            $user = User::findOrFail($id);
-        }
-            
-        catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e){//
-        }
-        
-        
-        $user->nome_user = mb_strtoupper($request->nome, 'UTF-8'); 
-        $user->email_user = $request->email;
-        $user->password = $user->password;
-        // $user->img_user = $user->img_user; // Lembra que isso pode ser apagado
-        $user->dataN_user = $request->dataN;
-        $user->tipo_user = $user->tipo_user;
-        $user->tel_user = $request->tel;
-        $user->escola_id = $user->escola_id;
-
-        $user->save();
-
-        return redirect('/professores')->with('msg', 'Usuário editado com sucesso.');
     }
 }

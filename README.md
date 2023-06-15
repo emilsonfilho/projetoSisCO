@@ -1,64 +1,69 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
+<p align="center"><img src="public/img/siscologonova.png" width="400"></p>
+
+# SisCO - Sistema de Controle de Ocorrências
+
+## Sobre o sistema
+
+<p id="sobre">Este é um sistema desenvolvido para controlar as ocorrências de uma escola, permitindo que a equipe gestora possa monitorar e gerenciar as situações problemáticas que ocorrem dentro do ambiente escolar.</p>
+
+<p>O sistema permite o cadastro de ocorrências relacionadas a diversos tipos de situações, como conflitos entre alunos, problemas de disciplina em sala de aula, incidentes de segurança, entre outros. As ocorrências podem ser cadastradas por funcionários da escola que tenham acesso ao sistema.</p>
+
+<p>Além do cadastro de ocorrências, o sistema permite o acompanhamento e gerenciamento dessas situações, permitindo que a equipe gestora possa tomar medidas para resolver o problema e evitar que ele se repita.</p>
+
+<p>O sistema possui uma interface amigável e intuitiva, que facilita o uso por parte dos usuários. É possível realizar consultas, gerar relatórios e exportar dados em diferentes formatos para facilitar a análise das informações.</p>
+
+<p>Este sistema é uma ferramenta essencial para as escolas que desejam manter um ambiente seguro e saudável para seus alunos, permitindo o controle e gerenciamento eficiente de ocorrências.</p>
 
 <p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
+<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## Tabela de conteúdos
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-   [Sobre](#sobre-o-sistema)
+-   [Tabela de Conteúdos](#tabela-de-conteúdos)
+-   [Pré-requisitos](#pré-requisitos)
+    -   [Instalando o sistema](#instalando-o-sistema)
+-   [Screenshots](#screenshots)
+-   [Tecnologias](#tecnologias)
+-   [Contribuições](#contribuições)
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+<h4 align="center"> 
+	🚧 SisCO 🚀 Concluído  🚧
+</h4>
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Pré-requisitos
 
-## Learning Laravel
+Antes de começar a aproveitar o sistema, deve ser levado em consideração a instalação de tal programa.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Instalando o sistema
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Screenshots
 
-## Laravel Sponsors
+<img src="public/screenshots/screenshot1.png" style="width: 75%; display: block; margin: 5px auto">
+<img src="public/screenshots/screenshot2.png" style="width: 75%; display: block; margin: 5px auto">
+<img src="public/screenshots/screenshot3.png" style="width: 75%; display: block; margin: 5px auto">
+<img src="public/screenshots/screenshot4.png" style="width: 75%; display: block; margin: 5px auto">
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+## Tecnologias
 
-### Premium Partners
+Para a realização desse projeto, utilizamos as seguintes tecnologias:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+-   [Laravel](https://laravel.com/docs/10.x/readme)
+-   [Bootstrap](https://getbootstrap.com.br/docs/4.1/getting-started/introduction/)
+-   [jQuery Mask](https://api.jquery.com/)
+-   [jQuery Validation](https://jqueryvalidation.org/documentation/)
 
-## Contributing
+## Contribuições
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+<table>
+  <tr>
+    <td align="center"><a href="https://rocketseat.com.br"><img style="border-radius: 50%;" src="https://avatars2.githubusercontent.com/u/2254731?s=400&u=0ba16a79456c2f250e7579cb388fa18c5c2d7d65&v=4" width="100px;" alt=""/><br /><sub><b>Bianca Sousa</b></sub></a><br />👨‍🚀</td>
+    <td align="center"><a href="https://rocketseat.com.br"><img style="border-radius: 50%;" src="https://avatars2.githubusercontent.com/u/2254731?s=400&u=0ba16a79456c2f250e7579cb388fa18c5c2d7d65&v=4" width="100px;" alt=""/><br /><sub><b>Davi Francisco</b></sub></a><br />👨‍🚀</td>
+    <td align="center"><a href="https://github.com/emilsonfilho"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/92304613?s=96&v=4" width="100px;" alt=""/><br/><sub><b>Francisco Emilson</b></sub></a><br />👨‍🚀</td>
+    <td align="center"><a href="https://github.com/emilsonfilho"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/u/92304613?s=96&v=4" width="100px;" alt=""/><br/><sub><b>Gabriel Dickinson</b></sub></a><br />👨‍🚀</td>
+  </tr>
+</table>
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

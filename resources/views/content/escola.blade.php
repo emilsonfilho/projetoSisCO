@@ -3,6 +3,7 @@
 @section('title', 'Dados da Instituição')
 
 @section('content')
+@if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR')
     <div class="bloco cad">
         <div class="header">
             <h1>Editando: <span>{{ $nome }}</span></h1>
@@ -41,4 +42,5 @@
             @endif
         </div>
     </div>
+    @endif
 @endsection

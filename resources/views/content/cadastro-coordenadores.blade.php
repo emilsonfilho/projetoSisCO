@@ -3,6 +3,7 @@
 @section('title', 'Cadastro de Coordenadores')
 
 @section('content')
+
     <div class="bloco cad">
         <div class="header">
             <h1>Cadastro de coordenadores</h1>
@@ -26,7 +27,6 @@
                             required>
                     </div>
                     <div class="line">
-                        <input type="file" name="foto" id="iFoto" placeholder="Arquivo de foto" class="w70">
                         <input type="password" name="senha" id="iSenha" placeholder="Senha" class="w70"
                             minlength="8" required>
                     </div>
@@ -41,4 +41,5 @@
             @endif
         </div>
     </div>
+    
 @endsection

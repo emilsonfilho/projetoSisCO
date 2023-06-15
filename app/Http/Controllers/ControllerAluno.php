@@ -1,42 +1,55 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\User;
+use App\Models\Alerta;
 use App\Models\Aluno;
 use App\Models\Turma;
 use App\Models\Curso;
+use App\Models\Ocorrencia;
 use DateTime;
 use Error;
 use Illuminate\Http\Request;
+
 
 class ControllerAluno extends Controller
 {
     public function index()
     {
-        $turmas = Turma::all();
+        // $turmas = Turma::all();
+        $anoAtual = date('Y');
+        $anoMinimo = $anoAtual - 2;
+        $turmas = Turma::where('ano', '>=', $anoMinimo)->where('ano', '<=', $anoAtual)->get();
+        $pegaTipoUser = function ($id) {
+            return User::findOrFail($id)->tipo_user;
+        };
+
 
         $nomeCurso = function ($param) {
             try {
                 $curso = Curso::findOrFail($param->cursos_id);
-            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {  
-                // Aqui dentro você pode deixar quieto, se quiser, mas anote o caso para que possamos ver o que fazemos com essa exceção depoi
+            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                throw new Error('Turma não encontrada');
             }
             $nomeCurso = $curso->nome_curso;
             return $nomeCurso;
         };
 
-        return view('content.cadastro-alunos', ['turmas' => $turmas, 'nomeCurso' => $nomeCurso]);
+        return view('content.cadastro-alunos', [
+            'turmas' => $turmas, 
+            'nomeCurso' => $nomeCurso,
+            'tipoUser' => $pegaTipoUser(auth()->id())
+        ]);
     }
 
     public function store(Request $request)
     {
         $aluno = new Aluno;
 
-        // Essa função pega exatamente a turma do cara
         $pegaIdTurma = function ($param, $pegaIdCurso) {
             $arr = explode('º', $param);
             $serie = intval($arr[0]);
-            $ano = 0; // Valor aleatório para que a variável possa ser acessada
+            $ano = 0; 
 
             switch ($serie) {
                 case 1:
@@ -97,20 +110,12 @@ class ControllerAluno extends Controller
             $dados_arquivo = fopen($arquivo['tmp_name'], "r");
             $pegaIdTurma = function ($ano, $curso, $pegaIdCurso) {
                 $idCurso = $pegaIdCurso($curso);
-                $turmas = Turma::all();
-
-                foreach ($turmas as $turma) {
-                    if (($turma->ano == $ano) && ($turma->cursos_id == $idCurso)) {
-                        // return $turma->id;
-                        return 1;
-                    }
-                }
-                throw new Error('Turma não encontrada.');
+                return Turma::where('ano', $ano)->where('cursos_id', $idCurso)->first()->id;
             };
 
             // Essa função consegue pegar o id do curso do cara
             $pegaIdCurso = function ($param) {
-                
+
                 $curso = Curso::where('nome_curso', $param)->first();
 
                 return $curso->id;
@@ -120,7 +125,7 @@ class ControllerAluno extends Controller
             while ($linha = fgetcsv($dados_arquivo, 1000, ";")) {
                 if ($linha[0] != "NOME") {
 
-                    
+
                     print_r($linha);
                     $aluno = new Aluno;
                     $aluno->nome_aluno = mb_strtoupper(mb_convert_encoding($linha[0], "UTF-8"), 'UTF-8');
@@ -151,12 +156,71 @@ class ControllerAluno extends Controller
         // return redirect('/cadAlunos');
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         try {
             $aluno = Aluno::findOrFail($id);
+            Alerta::where('aluno_id', $aluno->id)->delete();
+            Ocorrencia::where('alunos_id', $aluno->id)->delete();
             $idTurmaAluno = Turma::findOrFail($aluno->turmas_id)->id;
             $aluno->delete();
             return redirect('/relturmas/' . $idTurmaAluno)->with('msg', 'Aluno removido com sucesso');
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw new Error('Aluno não encontrado.');
+        }
+    }
+
+    public function show($id)
+    {
+        try {
+            $aluno = Aluno::findOrFail($id);
+            $cursos = Curso::orderBy('nome_curso')->get();
+            return view('content.editar-aluno', [
+                'aluno' => $aluno,
+                'cursos' => $cursos
+            ]);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            throw new Error('Aluno não encontrado.');
+        }
+    }
+
+    public function update(Request $request, $id)
+    {
+        try {
+            // $data = [
+            //     'nome_aluno' => $request->nomeAluno,
+            //     'matricula' => $request->matricula,
+            //     'email_aluno' => $request->email,
+            //     'dataN_aluno' => $request->dataN,
+            //     'nome_responsavel' => $request->nomeResponsavel,
+            //     'end_responsavel' => $request->endereco
+            // ];
+            $aluno = Aluno::findOrFail($id);
+
+            // Essa função pega exatamente a turma do cara
+            $pegaIdTurma = function ($param, $id_curso) {
+                return Turma::where('ano', $param)->where('cursos_id', $id_curso)->first()->id;
+            };
+
+            $nome = mb_strtoupper($request->nomeAluno, 'UTF-8');
+
+            $aluno->nome_aluno = $nome;
+            $aluno->matricula = $request->matricula;
+            $aluno->email_aluno = $request->email;
+            $aluno->dataN_aluno = $request->dataN;
+            $aluno->nome_responsavel = mb_strtoupper($request->nomeResponsavel, 'UTF-8');
+            $aluno->end_responsavel = $request->end;
+            $aluno->tel_responsavel = $request->telResponsavel;
+            $aluno->qntd_ocorrencias_assinadas = $aluno->qntd_ocorrencias_assinadas;
+            $aluno->qntd_alertas = $aluno->qntd_alertas;
+            $aluno->escola_id = 1; // Novamente, esse sistema pega a JMF id = 1
+            $id_curso = $request->curso;
+            $aluno->turmas_id = $pegaIdTurma($request->serie, $id_curso);
+            $aluno->cursos_id = $id_curso;
+
+            $aluno->save();
+
+            return redirect('/consulta/' . $aluno->id)->with('msg', 'Aluno editado com sucesso.');
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             throw new Error('Aluno não encontrado.');
         }

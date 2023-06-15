@@ -2,120 +2,131 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Models\Ocorrencia;
-use App\Models\Escola;
-use App\Models\User;
-use App\Models\Aluno;
-use App\Models\Turma;
-use App\Models\Curso;
-use App\Models\Alerta;
 use Error;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class ControllerSisco extends Controller
 {
     public function index()
     {
-        $alunos = Aluno::all();
-        $turmas = Turma::all();
-        $alunosAtuais = [];
+        $alunosAtuais = DB::table('tb_jmf_discente')
+        ->join('tb_jmf_turma', 'tb_jmf_discente.discente_idTurma', '=', 'tb_jmf_turma.turma_id')
+        ->where('tb_jmf_turma.turma_ano', '>=', (date("Y") - 2))
+        ->orderBy('tb_jmf_discente.discente_nome', 'asc')
+        ->select('tb_jmf_discente.*')
+        ->get();
+        
+        $alunosComOcorrencia = $alunosAtuais->filter(function ($aluno) {
+            return DB::table('tb_sisco_ocorrencia')
+                ->where('ocorrencia_idDiscente', $aluno->discente_matricula)
+                ->exists();
+        });
 
-        foreach ($alunos as $aluno) {
-            $idAlunoTurma = $aluno->turmas_id;
-            try {
-                $turmaAluno = Turma::findOrFail($idAlunoTurma);
-            } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) { //oo//
-            }
-
-            if ($turmaAluno->ano >= (date("Y") - 2)) {
-                $alunosAtuais[] = $aluno;
-            }
+        if ($alunosComOcorrencia->isNotEmpty()) {
+            $temOcorrencia = true;
+        } else {
+            $temOcorrencia = false;
         }
-
-        $hasOcorrencia = function ($alunos, $temOcorrencia) {
-            foreach ($alunos as $aluno) {
-                if ($aluno->qntd_ocorrencias_assinadas != 0) {
-                    return true;
-                }
-            }
-            return false;
-        };
 
         $nomeCurso = function ($param) {
             try {
-                $curso = Curso::findOrFail($param->cursos_id);
+                $curso = DB::table('tb_jmf_curso')->where('curso_id', $param->turma_idCurso)->first();
             } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                throw new Error('Curso não encontrado');
             }
 
-            $nomeCurso = $curso->nome_curso;
+            $nomeCurso = $curso->curso_nome;
             return $nomeCurso;
         };
 
         $numeroOcorrencias = function ($param) {
-            $todosAlunos = Aluno::all();
-            $quantidadeOcorrencias = 0;
-            for ($i = 0; $i < count($todosAlunos); $i++) {
-                if ($todosAlunos[$i]->turmas_id == $param->id) {
-                    // EXPLICANDO: Temos a soma dos números de todas as ocorrências de todos os estudantes
-                    $quantidadeOcorrencias = $quantidadeOcorrencias + $todosAlunos[$i]->qntd_ocorrencias_assinadas;
-                }
-            }
-            return $quantidadeOcorrencias;
+            return DB::table('tb_sisco_ocorrencia')
+                ->join('tb_jmf_discente', 'tb_sisco_ocorrencia.ocorrencia_idDiscente', '=', 'tb_jmf_discente.discente_matricula')
+                ->where('tb_jmf_discente.discente_idTurma', $param->turma_id)
+                ->count();
         };
 
-        $numeroAlertas = function ($turma) {
-            $todosAlunos = Aluno::all();
-            $quantidadeAlertas = 0;
-            foreach ($todosAlunos as $aluno) {
-                if ($aluno->turmas_id == $turma->id) {
-                    $quantidadeAlertas = $quantidadeAlertas + $aluno->qntd_alertas;
-                }
-            }
-            return $quantidadeAlertas;
+        $numeroAlertas = function ($param) {
+            return DB::table('tb_sisco_evento')
+                ->join('tb_jmf_discente', 'tb_sisco_evento.evento_idDiscente', '=', 'tb_jmf_discente.discente_matricula')
+                ->where('tb_jmf_discente.discente_idTurma', $param->turma_id)
+                ->count();
         };
 
-        $alertas = Alerta::where('concluido', false)->get();
+        
+        
+        // $qtdOcorrencias = DB::table('tb_jmf_ocorrencias')->where('aluno_id', $aluno_id)->count();
+        
 
-        $pegaNomeAluno = function ($id) {
+        // $alertas = Alerta::where('concluido', false)->get();
+        $alertas = collect(['alerta1', 'alerta2', 'alerta3']);
+
+
+        $pegaNomeAluno = function ($matricula) {
             try {
-                $aluno = Aluno::findOrFail($id);
+                // $aluno = Aluno::findOrFail($matricula);
+                $aluno = DB::table('tb_jmf_discente')->where('discente_matricula', $matricula)->first();
+                return $aluno->nome_aluno;
             } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            } // Pega o obj do determinado aluno
-            return $aluno->nome_aluno;
+                throw new Error('Aluno não encontrado no banco de dados');
+            }
         };
 
         $pegaMotivosAlerta = function ($alerta) {
-            $motivos = [];
-            $arrayIds = $alerta->motivos_alerta;
-            foreach ($arrayIds as $motivo) {
-                // $ocorrencia = Ocorrencia::where('id', $motivo)->first(); // faz o filtro por id
-                $ocorrencia = Ocorrencia::findOrFail($motivo);
-                $motivos[] = $ocorrencia->observacao;
-            }
-            return $motivos;
+            // $motivos = Ocorrencia::whereIn('id', $alerta->motivos_alerta)->get('observacao')->pluck('observacao')->toArray();
+            return ['Motivo 1', 'Motivo 2', 'Motivo 3'];
         };
 
-        $objAluno = function($id) {
+        $objAluno = function ($matricula) {
             try {
-                $aluno = Aluno::findOrFail($id);
+                // $aluno = Aluno::findOrFail($matricula);
+                $aluno = DB::table('tb_jmf_discente')->where('discente_matricula', $matricula)->first();
                 return $aluno;
             } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
                 throw new Error('Aluno não encontrado no banco de dados.');
             }
         };
 
-        $getTurma = function($id) {
-            $turma = Turma::findOrFail($id);
-            $serie = (date("Y") - $turma->ano) + 1;
-            $curso = Curso::findOrFail($turma->cursos_id)->nome_curso;
-            $turma = $serie . "º Ano - " . $curso;
+        $getTurma = function ($id) {
+            $turma = DB::table('tb_jmf_turma')->where('turma_id', $id)->first();
+            $turma = ((date("Y") - $turma->turma_ano) + 1) . "º Ano - " . $turma->turma_nome;
+        
+            if (!$turma) {
+                throw new Error('Turma não encontrada');
+            }
+        
             return $turma;
         };
+        
 
-        $temOcorrencia = $hasOcorrencia($alunos, $this);
+        $pegaTipoUser = function ($id) {
+            // return User::findOrFail($id)->tipo_user;
+            return DB::table('tb_jmf_usuario')->select('usuario_perfil')->where('usuario_id', $id)->first()->usuario_perfil;
+        };
+
+        $getCursoNome = function ($idTurma) {
+            // return Curso::findOrFail($id)->nome_curso;
+            $idCurso = DB::table('tb_jmf_turma')->select('turma_idCurso')->where('turma_id', $idTurma)->first()->turma_idCurso;
+            $nomeCurso = DB::table('tb_jmf_curso')->select('curso_nome')->where('curso_id', $idCurso)->first()->curso_nome;
+            return $nomeCurso;
+        };
+
+        $getAno = function ($id) {
+            // return Turma::findOrFail($id)->ano;
+            return DB::table('tb_jmf_turma')->select('turma_ano')->where('turma_id', $id)->first()->turma_ano;
+        };
+
+
+        $motivosOcorrencias = function () {
+            return DB::table('tb_sisco_ocorrenciamotivo')->get();
+        };
+
         return view('content.principal', [
             'alunos' => $alunosAtuais,
-            'turmas' => $turmas,
+            'turmas' => DB::table('tb_jmf_turma')->get(),
             'nomeCurso' => $nomeCurso,
             'numeroOcorrencias' => $numeroOcorrencias,
             'temOcorrencia' => $temOcorrencia,
@@ -124,61 +135,38 @@ class ControllerSisco extends Controller
             'pegaNomeAluno' => $pegaNomeAluno,
             'pegaMotivosAlerta' => $pegaMotivosAlerta,
             'objAluno' => $objAluno,
-            'getTurma' => $getTurma
+            'getTurma' => $getTurma,
+            'tipoUser' => $pegaTipoUser(auth()->id()),
+            'getCursoNome' => $getCursoNome,
+            'getAno' => $getAno,
+            'motivosOcorrencias' => $motivosOcorrencias(),
         ]);
     }
 
     public function store(Request $request)
     {
-        $ocorrencia = new Ocorrencia;
+        // $request->motivo retorna o id daquele motivo
+        $aluno = DB::table('tb_jmf_discente')->where('discente_nome', $request->nomeAluno)->first();
+        $responsavelLegal = DB::table('tb_jmf_responsavellegal')->where('responsavelLegal_id', $aluno->discente_idResponsavel)->first();
+        $categoria = DB::table('tb_sisco_ocorrenciamotivo')->where('ocorrenciaMotivo_id', $request->motivo)->first();
 
-        $aluno = Aluno::where('nome_aluno', $request->nome)->first(); // Recebe aluno que tem a ocorrencia a ser colocada
-        $escola = Escola::findOrFail(1);
-        $user = auth()->id(); 
+        DB::table('tb_sisco_ocorrencia')->insert([
+            'ocorrencia_idDiscente' => $aluno->discente_matricula,
+            'ocorrencia_idColaborador' => 16849219,
+            'ocorrencia_idResponsavelLegal' => $responsavelLegal->responsavelLegal_id,
+            'ocorrencia_idCategoria' => $categoria->ocorrenciaMotivo_idCategoria,
+            'ocorrencia_idMotivo' => $request->motivo,
+            'ocorrencia_data' => $request->data,
+            'ocorrencia_hora' => $request->hora,
+            'ocorrencia_descricao' => $request->obs,
+            'ocorrencia_dataTime' => Carbon::now(),
+        ]);
 
-        $ocorrencia->motivo = $request->motivo;
-        $ocorrencia->observacao = $request->obs;
-        $ocorrencia->data = $request->data;
-        $ocorrencia->hora = $request->hora;
-        $ocorrencia->alunos_id = $aluno->id;
-        $ocorrencia->escola_id = $escola->id;
-        $ocorrencia->users_id = $user;
-        $ocorrencia->save();
-
-        $aluno->qntd_ocorrencias_assinadas += 1;
-        if ($aluno->qntd_ocorrencias_assinadas % 3 == 0) {
-            $alerta = new Alerta;
-
-            $idsOcorrencias = [];
-
-            $ocorrencias = Ocorrencia::all();
-            foreach ($ocorrencias as $ocorrencia) {
-                if ($ocorrencia->alunos_id == $aluno->id) {
-                    $idsOcorrencias[] = $ocorrencia->id;
-                }
-            }
-
-            $idsUltimasOcorrencias = [];
-
-            for ($i = 3; $i > 0; $i--) {
-                $idsUltimasOcorrencias[] = $idsOcorrencias[count($idsOcorrencias) - $i];
-            }
-            // Agora temos os três ids dos motivos na array de $idsOcorrencias, temos que colocar ela no banco
-
-            $alerta->motivos_alerta = $idsUltimasOcorrencias; // Olhe as anotações porque você tem que permitir que seu banco aceite arrays
-            $alerta->concluido = false;
-            $alerta->aluno_id = $aluno->id;
-            $alerta->save();
-
-            $aluno->qntd_alertas += 1;
-        }
-
-        $aluno->save();
-        
         return redirect('/principal')->with('msg', 'Ocorrência adicionada com sucesso.');
     }
 
-    public function marked($id) {
+    public function marked($id)
+    {
         try {
             $alerta = Alerta::findOrFail($id);
             $alerta->concluido = true;
@@ -187,5 +175,13 @@ class ControllerSisco extends Controller
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             throw new Error('Alerta não encontrado no banco de dados');
         }
+    }
+
+    public function logout(Request $request)
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/paginaLogin');
     }
 }

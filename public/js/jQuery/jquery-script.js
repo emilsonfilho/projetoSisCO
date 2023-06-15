@@ -122,3 +122,16 @@ $(document).ready(function(){
     $("#matricula").mask("00000000")
 
 })
+
+  $(document).ready(function(){
+      $("#confirmNumber") . validate({
+        rules:{
+            required:true,
+            
+        }
+   })    
+   $("#iNum").mask("(00) 0.0000-0000") 
+
+  
+  })
+ 

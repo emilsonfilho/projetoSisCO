@@ -32,7 +32,8 @@
                         @csrf
                         <div class="form-control">
                             <ion-icon name="mail-outline"></ion-icon>
-                            <input type="email" name="email" id="iEmail" placeholder="E-mail">
+                            <input type="text" name="email" id="iEmail" placeholder="E-mail">
+                            {{-- TROCAR O EMAIL POR USERNAME AQUI E NO CÓDIGO --}}
                         </div>
                                         </div>
                                         <div class="campo">
@@ -42,7 +43,7 @@
                             <input type="password" name="senha" id="iSenha" placeholder="Senha">
                         </div>
                                         </div>
-                                        <a href="#">Esqueceu a senha?</a>
+                                        <a href="/forgotPassword">Esqueceu a senha?</a>
                                         <div class="button">
                         <button class="btn" type="submit" id="iLogin">Login</button>
                                         </div>

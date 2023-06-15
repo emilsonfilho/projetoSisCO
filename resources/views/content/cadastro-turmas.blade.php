@@ -3,6 +3,7 @@
 @section('title', 'Cadastro De Turmas | SisCO')
 
 @section('content')
+    
     <div class="bloco cad">
         <div class="header">
             <h1>Cadastro de turmas</h1>
@@ -45,4 +46,5 @@
             @endif
         </div>
     </div>
+    
 @endsection

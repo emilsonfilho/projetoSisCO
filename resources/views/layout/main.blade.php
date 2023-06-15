@@ -157,7 +157,7 @@
         }
 
         .ml-12 {
-            margin-left: 3rem
+            margin-left: 3cadcoorem
         }
 
         .-mt-px {
@@ -399,7 +399,276 @@
     <link rel="stylesheet" href="/css/dashboard-professores.css">
     <link rel="stylesheet" href="/css/modal.css">
     <style>
+        a {
+            color: #fff;
+            text-decoration: none;
+            transition: 0.3s;
+        }
 
+        a:hover {
+            opacity: 0.7;
+        }
+
+        a.logo img {
+            width: 150px;
+        }
+
+        .logo {
+            font-size: 24px;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background: #fff;
+            height: 9vh;
+            margin-bottom: 25px;
+            /* padding-top: 25px; */
+        }
+
+        /* main {
+            background: url("bg.jpg") no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+        } */
+
+        .nav-list {
+            list-style: none;
+            display: flex;
+        }
+
+        .nav-list li {
+            letter-spacing: 3px;
+            margin-left: 32px;
+        }
+
+        .nav-list li button.sair {
+            background-color: #006d77;
+            color: #fff;
+            width: 150px;
+            height: 50px;
+            animation: none;
+            font-family: var(--poppins);
+            transition-duration: .7s
+        }
+
+        .nav-list li button.sair:hover {
+            background-color: #fff;
+            color: #a55f46;
+            border: 1px solid #a55f46;
+        }
+
+        .mobile-menu {
+            display: none;
+            cursor: pointer;
+        }
+
+        .mobile-menu div {
+            width: 32px;
+            height: 2px;
+            background: #fff;
+            margin: 8px;
+            transition: 0.3s;
+        }
+
+        @media (max-width: 999px) {
+            body {
+                overflow-x: hidden;
+            }
+
+            .nav-list {
+                position: absolute;
+                top: 8vh;
+                right: 0;
+                width: 50vw;
+                height: 100vh;
+                background: #fff;
+                flex-direction: column;
+                align-items: center;
+                justify-content: space-around;
+                transform: translateX(200%);
+                transition: transform 0.3s ease-in;
+            }
+
+            .nav-list li {
+                margin-left: 0;
+                opacity: 0;
+            }
+
+            .mobile-menu {
+                display: block;
+            }
+        }
+
+        .nav-list.active {
+            transform: translateX(0);
+        }
+
+        @keyframes navLinkFade {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+
+        .mobile-menu div {
+            background-color: #006d77;
+        }
+
+        .mobile-menu.active .line1 {
+            transform: rotate(-45deg) translate(-8px, 8px);
+        }
+
+        .mobile-menu.active .line2 {
+            opacity: 0;
+        }
+
+        .mobile-menu.active .line3 {
+            transform: rotate(45deg) translate(-5px, -7px);
+        }
+    </style>
+    <style>
+        .li-container:hover .dropdown-submenu {
+            display: block;
+            transition: all 0.2s ease;
+            transition-delay: 0.5s;
+        }
+
+        .li-container {
+            position: relative;
+            /* padding: 10px; */
+        }
+
+        .li-container>ul {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            padding: 10px;
+            margin: 0;
+        }
+
+
+
+        .dropdown-menu {
+            display: flex;
+            gap: 2px;
+            font-family: Verdana, Geneva, Tahoma, sans-serif;
+            border: none;
+        }
+
+        .dropdown-menu li {
+            width: 150px;
+            height: 50px;
+            list-style: none;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            width: 100%;
+            height: 100%;
+            color: black;
+            text-decoration: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1rem;
+            transition: all .2s linear;
+            font-family: var(--poppins);
+        }
+
+        .dropdown-menu li:hover>a {
+            color: #006D77;
+        }
+
+        .dropdown-menu li:hover>.dropdown-submenu {
+            display: block;
+        }
+
+        .dropdown-submenu {
+            margin-top: -10px;
+            display: none;
+        }
+
+        .dropdown-submenu a {
+            background-color: #fff;
+            width: 150%;
+            display: flex;
+            justify-content: flex-start;
+            padding-left: 20px;
+            font-size: .8rem;
+            border-left: 8px solid transparent;
+        }
+
+        .dropdown-submenu li:hover>a {
+            border-left: 8px solid #83C5BE;
+        }
+
+        @media screen and (min-width: 850px) and (max-width: 999px) {
+            .nav-list.active {
+                transform: translateX(85%);
+            }
+        }
+
+        @media screen and (min-width: 720px) and (max-width: 849px) {
+            .nav-list.active {
+                transform: translateX(75%);
+            }
+        }
+
+        @media screen and (min-width: 570px) and (max-width: 719px) {
+            .nav-list.active {
+                transform: translateX(55%);
+            }
+        }
+
+        @media screen and (min-width: 470px) and (max-width: 569px) {
+            .nav-list.active {
+                transform: translateX(45%);
+            }
+        }
+
+        @media screen and (min-width: 430px) and (max-width: 469px) {
+            .nav-list.active {
+                transform: translateX(35%);
+            }
+        }
+
+        @media screen and (min-width: 395px) and (max-width: 429px) {
+            .nav-list.active {
+                transform: translateX(25%);
+            }
+        }
+
+        @media screen and (max-width: 394px) {
+            .nav-list.active {
+                transform: translateX(15%);
+            }
+        }
+    </style>
+
+    <style>
+        @media screen and (min-width: 1000px) and (max-width: 1520px) {
+            a.logo {
+                display: none;
+            }
+
+            .dropdown-menu a {
+                font-size: .8rem;
+            }
+
+            .dropdown-menu li {
+                width: 100px;
+            }
+        }
     </style>
 </head>
 
@@ -408,19 +677,21 @@
         <div class="loader"></div>
     </div>
     <div class="content">
-        <nav>
-            <a href="/principal" class="link-box" hreflang="pt-BR" target="_self">
-                <div class="box">
-                    <div class="header-box">
-                        <div class="icon-box">
-                            <ion-icon name="home-outline"></ion-icon>
+        {{-- <nav>
+            @if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR' || $tipoUser == 'PROFESSOR')
+                <a href="/principal" class="link-box" hreflang="pt-BR" target="_self">
+                    <div class="box">
+                        <div class="header-box">
+                            <div class="icon-box">
+                                <ion-icon name="home-outline"></ion-icon>
+                            </div>
+                            <h1>Tela de<br><span>Início</span></h1>
                         </div>
-                        <h1>Tela de<br><span>Início</span></h1>
+                        <hr>
+                        <p>Retorne à página principal</p>
                     </div>
-                    <hr>
-                    <p>Retorne à página principal</p>
-                </div>
-            </a>
+                </a>
+            @endif
             <a href="/turmas" class="link-box" hreflang="pt-BR" target="_self">
                 <div class="box">
                     <div class="header-box">
@@ -433,6 +704,7 @@
                     <p>Veja os relatórios das turmas</p>
                 </div>
             </a>
+
             <a href="/professores" class="link-box" hreflang="pt-BR" target="_self">
                 <div class="box">
                     <div class="header-box">
@@ -445,30 +717,34 @@
                     <p>Visualize o corpo docente da instituição</p>
                 </div>
             </a>
-            <a href="/cadcoordenadores" class="link-box" hreflang="pt-BR" target="_self">
-                <div class="box">
-                    <div class="header-box">
-                        <div class="icon-box">
-                            <ion-icon name="people-circle-outline"></ion-icon>
+            @if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR')
+                <a href="/cadcoordenadores" class="link-box" hreflang="pt-BR" target="_self">
+                    <div class="box">
+                        <div class="header-box">
+                            <div class="icon-box">
+                                <ion-icon name="people-circle-outline"></ion-icon>
+                            </div>
+                            <h1>Cadastro de<br><span>Coordenadores</span></h1>
                         </div>
-                        <h1>Cadastro de<br><span>Coordenadores</span></h1>
+                        <hr>
+                        <p>Edite e veja quem compoe a coordenação escolar</p>
                     </div>
-                    <hr>
-                    <p>Edite e veja quem compoe a coordenação escolar</p>
-                </div>
-            </a>
-            <a href="/escola" class="link-box" hreflang="pt-BR" target="_self">
-                <div class="box">
-                    <div class="header-box">
-                        <div class="icon-box">
-                            <ion-icon name="extension-puzzle-outline"></ion-icon>
+                </a>
+            @endif
+            @if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR')
+                <a href="/escola" class="link-box" hreflang="pt-BR" target="_self">
+                    <div class="box">
+                        <div class="header-box">
+                            <div class="icon-box">
+                                <ion-icon name="extension-puzzle-outline"></ion-icon>
+                            </div>
+                            <h1>Dados da<br><span>Instituição</span></h1>
                         </div>
-                        <h1>Dados da<br><span>Instituição</span></h1>
+                        <hr>
+                        <p>Edite informações sobre a escola</p>
                     </div>
-                    <hr>
-                    <p>Edite informações sobre a escola</p>
-                </div>
-            </a>
+                </a>
+            @endif
             <a href="/manual" class="link-box" hreflang="pt-BR" target="_self">
                 <div class="box">
                     <div class="header-box">
@@ -481,30 +757,79 @@
                     <p>Acesse o PDF de uso</p>
                 </div>
             </a>
-            <a href="/cadTurmas" class="link-box" hreflang="pt-BR" target="_self">
-                <div class="box">
-                    <div class="header-box">
-                        <div class="icon-box">
-                            <ion-icon name="person-add-outline"></ion-icon>
+            @if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR')
+                <a href="/cadTurmas" class="link-box" hreflang="pt-BR" target="_self">
+                    <div class="box">
+                        <div class="header-box">
+                            <div class="icon-box">
+                                <ion-icon name="person-add-outline"></ion-icon>
+                            </div>
+                            <h1>Cadastro de <br><span>Turmas</span></h1>
                         </div>
-                        <h1>Cadastro de <br><span>Turmas</span></h1>
+                        <hr>
+                        <p>Cadatro de turmas novas</p>
                     </div>
-                    <hr>
-                    <p>Cadatro de turmas novas</p>
-                </div>
-            </a>
-            <a href="/cadAlunos" class="link-box" hreflang="pt-BR" target="_self">
-                <div class="box">
-                    <div class="header-box">
-                        <div class="icon-box">
-                            <ion-icon name="person-add-outline"></ion-icon>
+                </a>
+            @endif
+            @if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR')
+                <a href="/cadAlunos" class="link-box" hreflang="pt-BR" target="_self">
+                    <div class="box">
+                        <div class="header-box">
+                            <div class="icon-box">
+                                <ion-icon name="person-add-outline"></ion-icon>
+                            </div>
+                            <h1>Cadastro de <br><span>Alunos</span></h1>
                         </div>
-                        <h1>Cadastro de <br><span>Alunos</span></h1>
+                        <hr>
+                        <p>Cadatro de alunos novatos</p>
                     </div>
-                    <hr>
-                    <p>Cadatro de alunos novatos</p>
+                </a>
+            @endif
+
+
+
+
+
+
+        </nav> --}}
+        <nav>
+            <ul class="dropdown-menu">
+                <a class="logo" href="#"><img src="/img/siscologonova.png" alt=""></a>
+                <div class="mobile-menu">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
                 </div>
-            </a>
+                <ul class="nav-list">
+                    @if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR' || $tipoUser == 'PROFESSOR')
+                        <li><a href="/principal">Tela de Início</a></li>
+                    @endif
+                    <li><a href="/turmas">Relatório de turmas</a></li>
+                    <li><a href="/professores">Corpo Docente</a></li>
+                    @if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR')
+                        <li><a href="/escola">Dados Da Instituição</a></li>
+                    @endif
+                    <li><a href="/manual">Manual de Uso</a></li>
+                    @if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR')
+                        <div class="li-container">
+                            <li id="dropdown">
+                                <a href="#">Cadastro &#9660;</a>
+                                <ul class="dropdown-submenu">
+                                    <li><a href="/cadcoordenadores">COORDENADORES</a></li>
+                                    <li><a href="/cadAlunos">ALUNOS</a></li>
+                                    <li><a href="/cadTurmas">TURMAS</a></li>
+                                </ul>
+                            </li>
+                        </div>
+                    @endif
+                    <li id="sair">
+                        <form action="/logOut/" method="POST">
+                            @csrf
+                            <button type="submit" class="sair">Logout</button>
+                        </form>
+                        {{-- <a href="#" class="sair">Sair</a> --}}
+                    </li>
+                </ul>
         </nav>
         <main>
             @yield('content')
@@ -530,6 +855,7 @@
 <script src="/js/bootstrap.min.js"></script>
 <script src="/js/script.js"></script>
 <script src="/js/jQuery/btn-script.js"></script>
+<script src="/js/main-js/app-mobile.js"></script>
+<script src="/js/main-js/mobile-navbar.js"></script>
+
 </html>
-
-

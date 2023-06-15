@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="bloco cad edicao">
-    <div class="header">
+    <div class="header btn-voltar">
         <h1>Cadastrando novos alunos</h1>
         <a href="cadAlunos"><img src="/img/btnvoltar.svg" alt=""></a>
     </div>

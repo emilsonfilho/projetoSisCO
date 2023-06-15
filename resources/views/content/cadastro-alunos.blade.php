@@ -1,9 +1,10 @@
-z
+
 @extends('layout.main')
 
 @section('title', 'Cadastrando alunos')
 
 @section('content')
+@if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR')
     <div class="main">
         <div class="vetor">
             <img src="/img/novoAluno.svg" alt="Vetorização">
@@ -55,21 +56,5 @@ z
             </form>
         </div>
     </div>
-    {{-- <div class="bloco cad">
-        <div class="header">
-            <h1>Cadastrando novos alunos</h1>
-        </div>
-        <div class="body">
-            <div class="body-form">
-                <form action="/aluno" method="POST" autocomplete="off" id="iForm" autocomplete="off">
-                    @csrf
-                <form action="/aluno-csv" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <label for="iPlanilha">Cadastre por arquivo CSV: </label>
-                    <input type="file" name="planilha" id="iPlanilha"> 
-                    <button type="submit" id="cadastrar"><span>Cadastrar</span></button>
-                </form>
-            </div>
-        </div>
-    </div> --}}
+    @endif
 @endsection

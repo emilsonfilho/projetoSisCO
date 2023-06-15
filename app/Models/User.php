@@ -2,60 +2,57 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
+use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Authenticatable
+class User extends Authenticatable implements AuthenticatableContract, CanResetPasswordContract
 {
-    use HasApiTokens;
-    use HasFactory;
-    use HasProfilePhoto;
-    use Notifiable;
-    use TwoFactorAuthenticatable;
+    use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
+    protected $table = 'tb_jmf_usuario';
+    protected $primaryKey = 'usuario_id';
+
     protected $fillable = [
-        'name',
-        'email',
-        'password',
+        'usuario_nome',
+        'usuario_login',
+        'usuario_senha',
+        'usuario_perfil',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array
-     */
     protected $hidden = [
-        'password',
-        'remember_token',
-        'two_factor_recovery_codes',
-        'two_factor_secret',
+        'usuario_senha',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array
-     */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
+    public function getAuthIdentifierName()
+    {
+        return $this->primaryKey;
+    }
 
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = [
-        'profile_photo_url',
-    ];
+    public function getAuthIdentifier()
+    {
+        return $this->getAttribute($this->primaryKey);
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->usuario_senha;
+    }
+
+    public function getRememberToken()
+    {
+        return $this->getAttribute($this->getRememberTokenName());
+    }
+
+    public function setRememberToken($value)
+    {
+        $this->setAttribute($this->getRememberTokenName(), $value);
+    }
+
+    public function getRememberTokenName()
+    {
+        return 'usuario_remember_token';
+    }
 }

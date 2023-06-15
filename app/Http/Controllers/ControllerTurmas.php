@@ -3,111 +3,141 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Turma;
-use App\Models\Curso;
-use App\Models\Aluno;
-use App\Models\Ocorrencia;
-use App\Models\User;
-use Error;
-use Illuminate\Support\Facades\Date;
+use Illuminate\Support\Facades\DB;
+use SebastianBergmann\Type\ObjectType;
+use stdClass;
 
 class ControllerTurmas extends Controller
 {
     public function index()
     {
-        $turmas = Turma::all();
+        $anoAtual = date('Y');
+        $anoMinimo = $anoAtual - 2;
+        // $turmas = Turma::where('ano', '>=', $anoMinimo)->where('ano', '<=', $anoAtual)->orderBy('ano')->orderBy('curso.nome_curso')->get();
+        // $turmas = Turma::whereBetween('ano', [date("Y"), date("Y") - 2])->orderBy('cursos_id')->get();
+        // $ano_atual = intval(date('Y'));
+        // $turmas = Turma::where('ano', '>=', $ano_atual - 2)
+        //     ->where('ano', '<=', $ano_atual)
+        //     ->orderBy('cursos_id')
+        //     ->get();
+        // $turmas = Turma::with('curso')
+        //         ->join('cursos', 'turmas.cursos_id', '=', 'cursos.id')
+        //         ->select('turmas.id AS turma_id', 'turmas.ano', 'cursos.nome_curso', 'cursos.id AS curso_id')
+        //         ->where('ano', '>=', $anoMinimo)
+        //         ->where('ano', '<=', $anoAtual)
+        //         ->orderBy('ano', 'desc')
+        //         ->orderBy('cursos_id', 'asc')
+        //         ->get();
+
+        $turmas = DB::table('tb_jmf_turma')
+            ->join('tb_jmf_curso', 'tb_jmf_turma.turma_idCurso', '=', 'tb_jmf_curso.curso_id')
+            ->select('tb_jmf_turma.turma_id AS turma_id', 'tb_jmf_turma.turma_ano', 'tb_jmf_curso.curso_nome', 'tb_jmf_curso.curso_id AS curso_id')
+            ->where('tb_jmf_turma.turma_ano', '>=', $anoMinimo)
+            ->where('tb_jmf_turma.turma_ano', '<=', $anoAtual)
+            ->orderBy('tb_jmf_turma.turma_ano', 'desc')
+            ->orderBy('tb_jmf_turma.turma_idCurso', 'asc')
+            ->get();
+
+        $pegaTipoUser = function ($id) {
+            // return User::findOrFail($id)->tipo_user;
+            return DB::table('tb_jmf_usuario')->select('usuario_perfil')->where('usuario_id', $id)->first()->usuario_perfil;
+        };
 
         $nomeCurso = function ($param) {
             try {
-                $curso = Curso::where('id', $param->cursos_id)->first();
+                $curso = DB::table('tb_jmf_curso')->where('id', $param->cursos_id)->first();
             } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+                return null;
             }
             $nomeCurso = $curso->nome_curso;
             return $nomeCurso;
         };
 
-        return view('content.opcoesturmas', ['turmas' => $turmas, 'nomeCurso' => $nomeCurso]);
-    }
-
-    public function register()
-    {
-        $cursos = Curso::all();
-
-        return view('content.cadastro-turmas', ['cursos' => $cursos]);
-    }
-
-    public function store(Request $request)
-    {
-        $turma = new Turma;
-
-        $turma->ano = $request->ano;
-        $turma->cursos_id = $request->curso;
-
-        $turmasBanco = Turma::all();
-        foreach ($turmasBanco as $turmaBanco) {
-            if (($turmaBanco->ano == $turma->ano) && ($turmaBanco->cursos_id == $turma->cursos_id)) {
-                return redirect('/cadTurmas')->with('err', 'Turma já registrada.');        
-            }
-       }
-        $turma->save();
-
-        return redirect('/cadTurmas')->with('msg', 'Turma registrada com sucesso.');
+        return view('content.opcoesturmas', ['turmas' => $turmas, 'nomeCurso' => $nomeCurso,  'tipoUser' => $pegaTipoUser(auth()->id())]);
     }
 
     public function relatorioIndex($id)
     {
-        $turma = Turma::findOrFail($id);
+        // $turma = Turma::findOrFail($id);
+        $turma = DB::table('tb_jmf_turma')->where('turma_id', $id)->first();
 
         $nomeCurso = function ($param) {
-            // Frequentemente falta o first, só ter mais uma olhadinha
-            $curso = Curso::where('id', $param->cursos_id)->first();
-            $nomeCurso = $curso->nome_curso;
-            return $nomeCurso;
+            return DB::table('tb_jmf_curso')->select('curso_nome')->where('curso_id', $param->turma_idCurso)->first()->curso_nome;
         };
 
-        // Retorna array com todos os alunos da turma
         $getAlunosTurma = function ($turma) {
-            $alunosTurma = Aluno::where('turmas_id', $turma->id)->orderBy('nome_aluno')->get();
-            return $alunosTurma;
+            return DB::table('tb_jmf_discente')->where('discente_idTurma', $turma->turma_id)->orderBy('discente_nome', 'asc')->get();
+        };
+        // $getAlunosTurma(DB::table('tb_jmf_turma')->where('turma_id', 1)->first());
+
+        $getQuantidadeOcorrencias = function ($id) {
+            // return $alunos->sum('qntd_ocorrencias_assinadas');
+            return DB::table('tb_sisco_ocorrencia')
+                ->join('tb_jmf_discente', 'tb_sisco_ocorrencia.ocorrencia_idDiscente', '=', 'tb_jmf_discente.discente_matricula')
+                ->where('tb_jmf_discente.discente_idTurma', $id)
+                ->count();
+
+
         };
 
-        $numeroOcorrencias = function ($turma, $getAlunosTurmas) {
-            $quantidadeOcorrencias = 0;
-            $alunos = $getAlunosTurmas($turma);
-            foreach ($alunos as $aluno) {
-                $quantidadeOcorrencias = $quantidadeOcorrencias + $aluno->qntd_ocorrencias_assinadas;
-            }
-            return $quantidadeOcorrencias;
+        $getQuantidadeAlertas = function ($id) {
+            // return $alunos->sum('qntd_alertas');
+
+            return DB::table('tb_sisco_evento')
+                ->join('tb_jmf_discente', 'tb_sisco_evento.evento_idDiscente', '=', 'tb_jmf_discente.discente_matricula')
+                ->where('tb_jmf_discente.discente_idTurma', $id)
+                ->count();
         };
 
-        // Recebe $turma
         $curso = $nomeCurso($turma);
-        $serie = (date("Y") - $turma->ano) + 1;
+        $serie = (date("Y") - $turma->turma_ano) + 1;
 
-        $numOcorrenciasTurma = $numeroOcorrencias($turma, $getAlunosTurma);
+        $pegaTipoUser = function ($id) {
+            // return User::findOrFail($id)->tipo_user;
+            return DB::table('tb_jmf_usuario')->select('usuario_perfil')->where('usuario_id', $id)->first()->usuario_perfil;
+        };
+
+        $numOcorrenciasTurma = $getQuantidadeOcorrencias($id);
+
+        $numAlertasTurma = $getQuantidadeAlertas($id);
+
+        $numOcorrenciasAluno = function ($id) {
+            return DB::table('tb_sisco_ocorrencia')->where('ocorrencia_idDiscente', $id)->count();
+        };
+
+        $numEventosAluno = function ($id) {
+            return DB::table('tb_sisco_evento')->where('evento_idDiscente', $id)->count();
+        };
+
 
         return view('relatorios.relatorio-turmas', [
             'nomeTurma' => $serie . "º Ano - " . $curso,
             'numOcorrenciasTurma' => $numOcorrenciasTurma,
-            'alunos' => $getAlunosTurma($turma)
+            'numAlertasTurmas' => $numAlertasTurma,
+            'alunos' => $getAlunosTurma($turma),
+            'numOcorrenciasAluno' => $numOcorrenciasAluno,
+            'numEventosAluno' => $numEventosAluno,
+            'tipoUser' => $pegaTipoUser(auth()->id())
         ]);
     }
 
-    public function search($id)
+    public function search($matricula)
     {
-        $aluno = Aluno::findOrFail($id);
+        $aluno = DB::table('tb_jmf_discente')->where('discente_matricula', $matricula)->first();
+        $responsavel = DB::table('tb_jmf_responsavellegal')->where('responsavelLegal_id', $aluno->discente_idResponsavel)->first();
 
-        $getNomeCurso = function ($id_curso) {
-            return Curso::findOrFail($id_curso)->nome_curso;
+        // Recebe o id da turma e de lá pega o id do curso
+        $getNomeCurso = function ($id_turma) {
+            $id_curso = DB::table('tb_jmf_turma')->select('turma_idCurso')->where('turma_id', $id_turma)->first()->turma_idCurso;
+            return DB::table('tb_jmf_curso')->select('curso_nome')->where('curso_id', $id_curso)->first()->curso_nome;
         };
 
         $getSerieTurma = function ($id_turma) {
-            $ano = Turma::findOrFail($id_turma)->ano;
+            $ano = DB::table('tb_jmf_turma')->select('turma_ano')->where('turma_id', $id_turma)->first()->turma_ano;
             return (date("Y") - $ano) + 1;
         };
 
         $formatDataN = function ($data) {
-            // return strtotime($data);
             $f = implode('/', array_reverse(explode('-', $data)));
             return $f;
         };
@@ -116,30 +146,47 @@ class ControllerTurmas extends Controller
             return date("H:i", strtotime($hora));
         };
 
-        $ocorrencias = Ocorrencia::where('alunos_id', $aluno->id)->get();
+        $ocorrencias = DB::table('tb_sisco_ocorrencia')->where('ocorrencia_idDiscente', $aluno->discente_matricula)->get();
 
         $getCoordenador = function ($id) {
-            $coordenador_id = Ocorrencia::findOrFail($id)->users_id;
-            $coordenador_nome = User::findOrFail($coordenador_id)->nome_user;
+            // $coordenador_id = Ocorrencia::findOrFail($id)->users_id;
+            $colaborador_matricula = 16849219;
+            // LEMBRAR DE MUDAR PARA UM NÚMERO DINÂMICO 
+            // $coordenador_nome = User::findOrFail($colaborador_matricula)->nome_user;
+            $coordenador_nome = DB::table('tb_jmf_colaborador')->select('colaborador_nome')->where('colaborador_matricula', $colaborador_matricula)->first()->colaborador_nome;
             return $coordenador_nome;
         };
 
+        $pegaNumSetor = function ($id) {
+            // return User::findOrFail($id)->tipo_user;
+            return DB::table('tb_jmf_colaborador')->select('colaborador_idSetor')->where('colaborador_matricula', $id)->first()->colaborador_idSetor;
+        };
+
+        $getMotivoOcorrencia = function ($id) {
+            $idMotivo = DB::table('tb_sisco_ocorrencia')->where('ocorrencia_id', $id)->first()->ocorrencia_idMotivo;
+            return DB::table('tb_sisco_ocorrenciamotivo')->where('ocorrenciaMotivo_id', $idMotivo)->first()->ocorrenciaMotivo_descricao;
+        };
+
         return view('relatorios.relatorio-aluno-individual', [
-            'id' => $aluno->id,
-            'nome' => $aluno->nome_aluno,
-            'turma' => $getSerieTurma($aluno->turmas_id) . "º Ano - " . $getNomeCurso($aluno->cursos_id),
-            'serie' => $getSerieTurma($aluno->turmas_id) . "º Ano",
-            'curso' => $getNomeCurso($aluno->cursos_id),
-            'email' => $aluno->email_aluno,
-            'matricula' => $aluno->matricula,
-            'dataN' => $formatDataN($aluno->dataN_aluno),
-            'nomeResponsavel' => $aluno->nome_responsavel,
-            'endereco' => $aluno->end_responsavel,
-            'telefone' => $aluno->tel_responsavel,
-            'ocorrencias' => $ocorrencias,
+            'id' => $aluno->discente_matricula,
+            'turma_id' => $aluno->discente_idTurma,
+            'nome' => $aluno->discente_nome,
+            'turma' => $getSerieTurma($aluno->discente_idTurma) . "º Ano - " . $getNomeCurso($aluno->discente_idTurma),
+            'serie' => $getSerieTurma($aluno->discente_idTurma) . "º Ano",
+            'curso' => $getNomeCurso($aluno->discente_idTurma),
+            'email' => $aluno->discente_email,
+            'matricula' => $aluno->discente_matricula,
+            'dataN' => $formatDataN($aluno->discente_dataNascimento),
+            'nomeResponsavel' => $responsavel->responsavelLegal_nome,
+            'telefone' => $responsavel->responsavelLegal_telefone,
+            'whatsapp' => $responsavel->responsavelLegal_whatsapp,
+            'ocorrencias' => $ocorrencias, 
             'getCoordenador' => $getCoordenador,
             'formatarData' => $formatDataN,
-            'formatarHora' => $formatTime
+            'formatarHora' => $formatTime,
+            'tipoUser' => $pegaNumSetor(16849219),
+            'getMotivoOcorrencia' => $getMotivoOcorrencia,
+            // LEMBRE-SE QUE AQUI VAI TER QUE SER O USUÁRIO AUTENTICADO, OK?
         ]);
     }
 }

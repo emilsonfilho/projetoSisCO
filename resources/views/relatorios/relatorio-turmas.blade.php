@@ -1,12 +1,17 @@
-@extends('layout.main')
+@extends('layout.main-pure')
 
 @section('title', 'Relatório Detalhado')
 
 @section('content')
+<style>
+    .dashboard {
+        margin-top: 25px;
+    }
+</style>
     <div class="dashboard">
         <div class="btn-voltar" style="display: flex !important;">
             <h3>Exibindo relatório de <span style="font-weight: bold; font-style: italic;">{{ $nomeTurma }}</span></h3>
-            <a href="/turmas"><img src="/img/btnvoltar.svg" alt=""></a>
+            <a class="" href="/turmas"><img src="/img/btnvoltar.svg" alt=""></a>
         </div>
         <div class="body">
         </div>
@@ -18,23 +23,24 @@
                         <th class="short" scope="col">Nº MATRÍCULA</th>
                         <th class="short" scope="col">QNTD. OCORRÊNCIAS</th>
                         <th class="short" scope="col">QNTD. ALERTAS</th>
-                        <th class="short" scope="col">CONSULTA</th>
+                        <th class="short" scope="col" id="consulta">CONSULTA</th>
                     </tr>
                     @if (count($alunos) != 0)
                         @foreach ($alunos as $aluno)
                             <tr>
-                                <td class="bold"><a href="/consulta/{{ $aluno->id }}" class="hover-underline"
-                                        hreflang="pt-BR" target="_self">{{ $aluno->nome_aluno }}</a></td>
-                                <td class="meio cinza">{{ $aluno->matricula }}</td>
-                                <td class="num">{{ $aluno->qntd_ocorrencias_assinadas }}</td>
-                                <td class="num">{{ $aluno->qntd_alertas }}</td>
+                                <td class="bold"><a href="/consulta/{{ $aluno->discente_matricula }}" class="hover-underline"
+                                        hreflang="pt-BR" target="_self">{{ $aluno->discente_nome }}</a></td>
+                                <td class="meio cinza">{{ $aluno->discente_matricula }}</td>
+                                <td class="num">{{ $numOcorrenciasAluno($aluno->discente_matricula) }}</td>
+                                <td class="num">{{ $numEventosAluno($aluno->discente_matricula) }}</td>
+                                {{-- LEMBRAR QUE TEM QUE PEGAR O COISA DAS OCORRÊNCIAS PARA FAZER ESSA BUSCA --}}
                                 <td class="acao">
-                                    <button type="submit" form="consulta_{{ $aluno->id }}" hreflang="pt-BR" target="_self">
+                                    <button type="submit" form="consulta_{{ $aluno->discente_matricula }}" hreflang="pt-BR" target="_self">
                                         <ion-icon name="search-outline"></ion-icon>
                                     </button>
                                 </td>
                             </tr>
-                            <form action="/consulta/{{ $aluno->id }}" id="consulta_{{ $aluno->id }}" method="GET"></form>
+                            <form action="/consulta/{{ $aluno->discente_matricula }}" id="consulta_{{ $aluno->discente_matricula }}" method="GET"></form>
                         @endforeach
                     @else
                         <h3>Não há alunos nesta turma</h3>
@@ -51,7 +57,7 @@
                     <h5>{{ $numOcorrenciasTurma }} Ocorrências</h5>
                 </li>
                 <li>
-                    <h5>X Suspensões</h5>
+                    <h5>{{ $numAlertasTurmas }} Alertas</h5>
                 </li>
             </ul>
         </div>
