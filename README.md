@@ -42,11 +42,6 @@ Antes de começar a aproveitar o sistema, deve ser levado em consideração a in
 
 ## Screenshots
 
-<img src="public/screenshots/screenshot1.png" style="width: 75%; display: block; margin: 5px auto">
-<img src="public/screenshots/screenshot2.png" style="width: 75%; display: block; margin: 5px auto">
-<img src="public/screenshots/screenshot3.png" style="width: 75%; display: block; margin: 5px auto">
-<img src="public/screenshots/screenshot4.png" style="width: 75%; display: block; margin: 5px auto">
-
 ## Tecnologias
 
 Para a realização desse projeto, utilizamos as seguintes tecnologias:
