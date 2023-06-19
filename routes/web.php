@@ -42,6 +42,8 @@ Route::get('/cadcoordenadores', function() {
 
 Route::get('/escola', [ControllerEscola::class, 'show'])->middleware('auth');
 
+Route::get('/editOcorrencia/{id}', [ControllerSisco::class, 'editOcorrencia']);
+
 Route::get('/manual', function() {
     $idUser = auth()->id();
     $tipoUser = User::findOrFail($idUser)->tipo_user;
@@ -115,3 +117,5 @@ Route::post('/confirmLogin', [ControllerSisco::class, 'confirmLogin']);
 Route::post('/confirmNumber', [ControllerSisco::class, 'confirmNumber']);
 
 Route::post('/newPassword', [ControllerSisco::class, 'newPass']);
+
+Route::any('/editOcorrenciaForm/{id}', [ControllerSisco::class, 'edit']);

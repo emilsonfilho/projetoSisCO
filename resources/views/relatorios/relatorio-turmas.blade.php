@@ -5,10 +5,10 @@
 @section('content')
 <style>
     .dashboard {
-        margin-top: 25px;
+        padding-top: 25px !important;
     }
 </style>
-    <div class="dashboard">
+    <div class="dashboard" >
         <div class="btn-voltar" style="display: flex !important;">
             <h3>Exibindo relatório de <span style="font-weight: bold; font-style: italic;">{{ $nomeTurma }}</span></h3>
             <a class="" href="/turmas"><img src="/img/btnvoltar.svg" alt=""></a>

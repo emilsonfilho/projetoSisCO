@@ -56,18 +56,11 @@ class ControllerSisco extends Controller
                 ->count();
         };
 
-        
-        
-        // $qtdOcorrencias = DB::table('tb_jmf_ocorrencias')->where('aluno_id', $aluno_id)->count();
-        
-
-        // $alertas = Alerta::where('concluido', false)->get();
         $alertas = collect(['alerta1', 'alerta2', 'alerta3']);
 
 
         $pegaNomeAluno = function ($matricula) {
             try {
-                // $aluno = Aluno::findOrFail($matricula);
                 $aluno = DB::table('tb_jmf_discente')->where('discente_matricula', $matricula)->first();
                 return $aluno->nome_aluno;
             } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -76,13 +69,11 @@ class ControllerSisco extends Controller
         };
 
         $pegaMotivosAlerta = function ($alerta) {
-            // $motivos = Ocorrencia::whereIn('id', $alerta->motivos_alerta)->get('observacao')->pluck('observacao')->toArray();
             return ['Motivo 1', 'Motivo 2', 'Motivo 3'];
         };
 
         $objAluno = function ($matricula) {
             try {
-                // $aluno = Aluno::findOrFail($matricula);
                 $aluno = DB::table('tb_jmf_discente')->where('discente_matricula', $matricula)->first();
                 return $aluno;
             } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
@@ -103,19 +94,16 @@ class ControllerSisco extends Controller
         
 
         $pegaTipoUser = function ($id) {
-            // return User::findOrFail($id)->tipo_user;
             return DB::table('tb_jmf_usuario')->select('usuario_perfil')->where('usuario_id', $id)->first()->usuario_perfil;
         };
 
         $getCursoNome = function ($idTurma) {
-            // return Curso::findOrFail($id)->nome_curso;
             $idCurso = DB::table('tb_jmf_turma')->select('turma_idCurso')->where('turma_id', $idTurma)->first()->turma_idCurso;
             $nomeCurso = DB::table('tb_jmf_curso')->select('curso_nome')->where('curso_id', $idCurso)->first()->curso_nome;
             return $nomeCurso;
         };
 
         $getAno = function ($id) {
-            // return Turma::findOrFail($id)->ano;
             return DB::table('tb_jmf_turma')->select('turma_ano')->where('turma_id', $id)->first()->turma_ano;
         };
 
@@ -145,7 +133,6 @@ class ControllerSisco extends Controller
 
     public function store(Request $request)
     {
-        // $request->motivo retorna o id daquele motivo
         $aluno = DB::table('tb_jmf_discente')->where('discente_nome', $request->nomeAluno)->first();
         $responsavelLegal = DB::table('tb_jmf_responsavellegal')->where('responsavelLegal_id', $aluno->discente_idResponsavel)->first();
         $categoria = DB::table('tb_sisco_ocorrenciamotivo')->where('ocorrenciaMotivo_id', $request->motivo)->first();
@@ -162,19 +149,12 @@ class ControllerSisco extends Controller
             'ocorrencia_dataTime' => Carbon::now(),
         ]);
 
-        return redirect('/principal')->with('msg', 'Ocorrência adicionada com sucesso.');
-    }
-
-    public function marked($id)
-    {
-        try {
-            $alerta = Alerta::findOrFail($id);
-            $alerta->concluido = true;
-            $alerta->save();
-            return redirect('/principal');
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
-            throw new Error('Alerta não encontrado no banco de dados');
+        if ($categoria->ocorrenciaMotivo_idCategoria === 1) {
+            return redirect('/principal')->with('msg', 'Ocorrência adicionada. Passível de um dia de suspensão e retorno à escola com pais ou responsáveis');
+        } else {
+            return redirect('/principal')->with('msg', 'Ocorrência adicionada. Passível de três dias de suspensão e retorno à escola com pais ou responsáveis');
         }
+
     }
 
     public function logout(Request $request)
@@ -183,5 +163,56 @@ class ControllerSisco extends Controller
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect('/paginaLogin');
+    }
+
+    public function editOcorrencia($id) {
+        $ocorrencia = DB::table('tb_sisco_ocorrencia')->where('ocorrencia_id', $id)->first();
+        $alunoDaOcorrencia = DB::table('tb_jmf_discente')->where('discente_matricula', $ocorrencia->ocorrencia_idDiscente)->first();
+
+        $getCursoNome = function ($idTurma) {
+            $idCurso = DB::table('tb_jmf_turma')->select('turma_idCurso')->where('turma_id', $idTurma)->first()->turma_idCurso;
+            $nomeCurso = DB::table('tb_jmf_curso')->select('curso_nome')->where('curso_id', $idCurso)->first()->curso_nome;
+            return $nomeCurso;
+        };
+
+        $getTurma = function ($id) {
+            $turma = DB::table('tb_jmf_turma')->where('turma_id', $id)->first();
+            $turma = ((date("Y") - $turma->turma_ano) + 1) . "º Ano - " . $turma->turma_nome;
+        
+            if (!$turma) {
+                throw new Error('Turma não encontrada');
+            }
+        
+            return $turma;
+        };
+
+        $motivosOcorrencias = function () {
+            return DB::table('tb_sisco_ocorrenciamotivo')->get();
+        };
+
+        return view('content.editOcorrencia', [
+            'ocorrencia' => $ocorrencia,
+            'discente' => $alunoDaOcorrencia,
+            'alunos' => DB::table('tb_jmf_discente')->get(),
+            'getCursoNome' => $getCursoNome,
+            'getTurma' => $getTurma,
+            'motivosOcorrencias' => $motivosOcorrencias()
+        ]);
+    }
+
+    public function edit(Request $request, $id) {
+        $aluno = DB::table('tb_jmf_discente')->where('discente_nome', $request->nomeAluno)->first();
+        $categoria = DB::table('tb_sisco_ocorrenciamotivo')->where('ocorrenciaMotivo_id', $request->motivo)->first();
+        
+        DB::table('tb_sisco_ocorrencia')->where('ocorrencia_id', $id)->update([
+            'ocorrencia_idCategoria' => $categoria->ocorrenciaMotivo_idCategoria,
+            'ocorrencia_idMotivo' => $request->motivo,
+            'ocorrencia_data' => $request->data,
+            'ocorrencia_hora' => $request->hora,
+            'ocorrencia_descricao' => $request->obs,
+            'ocorrencia_dataTime' => Carbon::now(),
+        ]);
+
+        return redirect('/principal')->with(['msg' => 'Ocorrência editada com sucesso']);
     }
 }

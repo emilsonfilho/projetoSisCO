@@ -13,22 +13,6 @@ class ControllerTurmas extends Controller
     {
         $anoAtual = date('Y');
         $anoMinimo = $anoAtual - 2;
-        // $turmas = Turma::where('ano', '>=', $anoMinimo)->where('ano', '<=', $anoAtual)->orderBy('ano')->orderBy('curso.nome_curso')->get();
-        // $turmas = Turma::whereBetween('ano', [date("Y"), date("Y") - 2])->orderBy('cursos_id')->get();
-        // $ano_atual = intval(date('Y'));
-        // $turmas = Turma::where('ano', '>=', $ano_atual - 2)
-        //     ->where('ano', '<=', $ano_atual)
-        //     ->orderBy('cursos_id')
-        //     ->get();
-        // $turmas = Turma::with('curso')
-        //         ->join('cursos', 'turmas.cursos_id', '=', 'cursos.id')
-        //         ->select('turmas.id AS turma_id', 'turmas.ano', 'cursos.nome_curso', 'cursos.id AS curso_id')
-        //         ->where('ano', '>=', $anoMinimo)
-        //         ->where('ano', '<=', $anoAtual)
-        //         ->orderBy('ano', 'desc')
-        //         ->orderBy('cursos_id', 'asc')
-        //         ->get();
-
         $turmas = DB::table('tb_jmf_turma')
             ->join('tb_jmf_curso', 'tb_jmf_turma.turma_idCurso', '=', 'tb_jmf_curso.curso_id')
             ->select('tb_jmf_turma.turma_id AS turma_id', 'tb_jmf_turma.turma_ano', 'tb_jmf_curso.curso_nome', 'tb_jmf_curso.curso_id AS curso_id')
@@ -39,7 +23,6 @@ class ControllerTurmas extends Controller
             ->get();
 
         $pegaTipoUser = function ($id) {
-            // return User::findOrFail($id)->tipo_user;
             return DB::table('tb_jmf_usuario')->select('usuario_perfil')->where('usuario_id', $id)->first()->usuario_perfil;
         };
 
@@ -58,7 +41,6 @@ class ControllerTurmas extends Controller
 
     public function relatorioIndex($id)
     {
-        // $turma = Turma::findOrFail($id);
         $turma = DB::table('tb_jmf_turma')->where('turma_id', $id)->first();
 
         $nomeCurso = function ($param) {
@@ -68,21 +50,15 @@ class ControllerTurmas extends Controller
         $getAlunosTurma = function ($turma) {
             return DB::table('tb_jmf_discente')->where('discente_idTurma', $turma->turma_id)->orderBy('discente_nome', 'asc')->get();
         };
-        // $getAlunosTurma(DB::table('tb_jmf_turma')->where('turma_id', 1)->first());
 
         $getQuantidadeOcorrencias = function ($id) {
-            // return $alunos->sum('qntd_ocorrencias_assinadas');
             return DB::table('tb_sisco_ocorrencia')
                 ->join('tb_jmf_discente', 'tb_sisco_ocorrencia.ocorrencia_idDiscente', '=', 'tb_jmf_discente.discente_matricula')
                 ->where('tb_jmf_discente.discente_idTurma', $id)
                 ->count();
-
-
         };
 
         $getQuantidadeAlertas = function ($id) {
-            // return $alunos->sum('qntd_alertas');
-
             return DB::table('tb_sisco_evento')
                 ->join('tb_jmf_discente', 'tb_sisco_evento.evento_idDiscente', '=', 'tb_jmf_discente.discente_matricula')
                 ->where('tb_jmf_discente.discente_idTurma', $id)
@@ -93,7 +69,6 @@ class ControllerTurmas extends Controller
         $serie = (date("Y") - $turma->turma_ano) + 1;
 
         $pegaTipoUser = function ($id) {
-            // return User::findOrFail($id)->tipo_user;
             return DB::table('tb_jmf_usuario')->select('usuario_perfil')->where('usuario_id', $id)->first()->usuario_perfil;
         };
 
@@ -126,7 +101,6 @@ class ControllerTurmas extends Controller
         $aluno = DB::table('tb_jmf_discente')->where('discente_matricula', $matricula)->first();
         $responsavel = DB::table('tb_jmf_responsavellegal')->where('responsavelLegal_id', $aluno->discente_idResponsavel)->first();
 
-        // Recebe o id da turma e de lá pega o id do curso
         $getNomeCurso = function ($id_turma) {
             $id_curso = DB::table('tb_jmf_turma')->select('turma_idCurso')->where('turma_id', $id_turma)->first()->turma_idCurso;
             return DB::table('tb_jmf_curso')->select('curso_nome')->where('curso_id', $id_curso)->first()->curso_nome;
@@ -149,16 +123,13 @@ class ControllerTurmas extends Controller
         $ocorrencias = DB::table('tb_sisco_ocorrencia')->where('ocorrencia_idDiscente', $aluno->discente_matricula)->get();
 
         $getCoordenador = function ($id) {
-            // $coordenador_id = Ocorrencia::findOrFail($id)->users_id;
             $colaborador_matricula = 16849219;
             // LEMBRAR DE MUDAR PARA UM NÚMERO DINÂMICO 
-            // $coordenador_nome = User::findOrFail($colaborador_matricula)->nome_user;
             $coordenador_nome = DB::table('tb_jmf_colaborador')->select('colaborador_nome')->where('colaborador_matricula', $colaborador_matricula)->first()->colaborador_nome;
             return $coordenador_nome;
         };
 
         $pegaNumSetor = function ($id) {
-            // return User::findOrFail($id)->tipo_user;
             return DB::table('tb_jmf_colaborador')->select('colaborador_idSetor')->where('colaborador_matricula', $id)->first()->colaborador_idSetor;
         };
 

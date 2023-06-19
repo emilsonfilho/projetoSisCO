@@ -801,27 +801,10 @@
                     <div class="line3"></div>
                 </div>
                 <ul class="nav-list">
-                    @if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR' || $tipoUser == 'PROFESSOR')
-                        <li><a href="/principal">Tela de Início</a></li>
-                    @endif
+                    <li><a href="/principal">Tela de Início</a></li>
                     <li><a href="/turmas">Relatório de turmas</a></li>
                     <li><a href="/professores">Corpo Docente</a></li>
-                    @if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR')
-                        <li><a href="/escola">Dados Da Instituição</a></li>
-                    @endif
-                    <li><a href="/manual">Manual de Uso</a></li>
-                    @if ($tipoUser == 'ADM' || $tipoUser == 'COORDENADOR')
-                        <div class="li-container">
-                            <li id="dropdown">
-                                <a href="#">Cadastro &#9660;</a>
-                                <ul class="dropdown-submenu">
-                                    <li><a href="/cadcoordenadores">COORDENADORES</a></li>
-                                    <li><a href="/cadAlunos">ALUNOS</a></li>
-                                    <li><a href="/cadTurmas">TURMAS</a></li>
-                                </ul>
-                            </li>
-                        </div>
-                    @endif
+                    <li><a href="/eventos">Eventos</a></li>
                     <li id="sair">
                         <form action="/logOut/" method="POST">
                             @csrf

@@ -15,6 +15,10 @@
                 padding-top: 32px
             }
         }
+
+        ion-icon {
+            color: #006d77;
+        }
     </style>
     <div class="bloco individual" style="margin-top: 64px">
         <div class="header">
@@ -75,6 +79,7 @@
                             <th>OBSERVAÇÃO</th>
                             <th>DATA E HORA</th>
                             <th>COORDENADOR RESPONSÁVEL</th>
+                            <th>AÇÃO</th>
                         </tr>
                         @if (count($ocorrencias) != 0)
                             @foreach ($ocorrencias as $ocorrencia)
@@ -85,9 +90,10 @@
                                     <td>{{ $formatarData($ocorrencia->ocorrencia_data) }} - {{ $formatarHora($ocorrencia->ocorrencia_hora) }}
                                     </td>
                                     <td>{{ $getCoordenador($ocorrencia->ocorrencia_id) }}</td>
+                                    <td><a href="/editOcorrencia/{{ $ocorrencia->ocorrencia_id }}"><ion-icon name="create-outline"></ion-icon></a></td>
                                 </tr>
                             @endforeach
-                        @else
+                        @else   
                             <h4>O aluno não possui ocorrências</h4>
                         @endif 
                     </table>
