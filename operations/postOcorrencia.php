@@ -18,13 +18,17 @@ try {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($row === false) {
-        echo "E-mail não encontrado no banco de dados";
+        $msgType = urlencode("error");
+        $msg = urlencode("E-mail não encontrado no banco de dados.");
+        header("Location: ../pages/home.php?sisco=cadOcorrencia&msgType=$msgType&msg=$msg");
         exit;
     }
 
     $idColaborador = $row['colaborador_matricula'];
 } catch (PDOException $e) {
-    echo "<strong>Error:</strong>" . $e->getMessage();
+    $msgType = urlencode("error");
+    $msg = urlencode("Ocorreu algum erro ao tentar registrar a ocorrência.");
+    header("Location: ../pages/home.php?sisco=cadOcorrencia&msgType=$msgType&msg=$msg");
 }
 
 
@@ -42,13 +46,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $rowResponsavelLegal = $stmtResponsavelLegal->fetch(PDO::FETCH_ASSOC);
 
         if ($rowResponsavelLegal === false) {
-            echo "Responsável legal não encontrado no banco de dados";
+            $msgType = urlencode("error");
+            $msg = urlencode("Responsável legal não encontrado no banco de dados.");
+            header("Location: ../pages/home.php?sisco=cadOcorrencia&msgType=$msgType&msg=$msg");
             exit;
         }
 
         $ocorrencia_idResponsavelLegal = $rowResponsavelLegal['discente_idResponsavel'];
     } catch (PDOException $e) {
-        echo "<strong>Error:</strong>" . $e->getMessage();
+        $msgType = urlencode("error");
+        $msg = urlencode("Ocorreu algum erro ao tentar registrar a ocorrência.");
+        header("Location: ../pages/home.php?sisco=cadOcorrencia&msgType=$msgType&msg=$msg");
     }
 
     // Outro select para pegar a categoria correspondente
@@ -63,13 +71,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $rowCategoria = $stmtCategoria->fetch(PDO::FETCH_ASSOC);
 
         if ($rowCategoria === false) {
-            echo "Categoria não encontrada no banco de dados";
+            $msgType = urlencode("error");
+            $msg = urlencode("Categoria não encontrada no banco de dados");
+            header("Location: ../pages/home.php?sisco=cadOcorrencia&msgType=$msgType&msg=$msg");
             exit;
         }
 
         $ocorrencia_idCategoria = $rowCategoria['ocorrenciaMotivo_idCategoria'];
     } catch (PDOException $e) {
-        echo "<strong>Error:</strong>" . $e->getMessage();
+        $msgType = urlencode("error");
+        $msg = urlencode("Ocorreu algum erro ao tentar registrar a ocorrência.");
+        header("Location: ../pages/home.php?sisco=cadOcorrencia&msgType=$msgType&msg=$msg");
     }
 
     $ocorrencia_data = $_POST['ocorrencia_data'];
@@ -101,9 +113,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Verificar se a inserção foi bem-sucedida
         if ($stmtInserirOcorrencia->rowCount() > 0) {
-            echo "Ocorrência registrada com sucesso!";
+            $msgType = urlencode("success");
+            $msg = urlencode("Ocorrência registrada com sucesso!");
+            header("Location: ../pages/home.php?sisco=cadOcorrencia&msgType=$msgType&msg=$msg");
         } else {
-            echo "Ocorreu um erro ao registrar a ocorrência.";
+            $msgType = urlencode("error");
+            $msg = urlencode("Ocorreu algum erro ao tentar registrar a ocorrência.");
+            header("Location: ../pages/home.php?sisco=cadOcorrencia&msgType=$msgType&msg=$msg");
         }
     } catch (PDOException $e) {
         echo "<strong>Error:</strong> " . $e->getMessage();

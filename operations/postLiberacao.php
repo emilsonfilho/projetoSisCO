@@ -18,13 +18,17 @@ try {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($row === false) {
-        echo "E-mail não encontrado no banco de dados";
+        $msgType = urlencode("error");
+        $msg = urlencode("Email não encontrado no banco de dados.");
+        header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
         exit;
     }
 
     $idColaborador = $row['colaborador_matricula'];
 } catch (PDOException $e) {
-    echo "<strong>Error:</strong>" . $e->getMessage();
+    $msgType = urlencode("error");
+    $msg = urlencode("Ocorreu algum erro ao tentar registrar a liberção.");
+    header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
 }
 
 
@@ -48,7 +52,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $liberacao_idResponsavel = $rowResponsavel['discente_idResponsavel'];
     } catch (PDOException $e) {
-        echo "<strong>Error:</strong>" . $e->getMessage();
+        // echo "<strong>Error:</strong>" . $e->getMessage();
+        $msgType = urlencode("error");
+        $msg = urlencode("Ocorreu algum erro ao tentar registrar a liberção.");
+        header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
     }
 
     $liberacao_data = $_POST['liberacao_dtSaida'];
@@ -78,11 +85,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Verificar se a inserção foi bem-sucedida
         if ($stmtInserirliberacao->rowCount() > 0) {
-            echo "Liberação registrada com sucesso!";
+            $msgType = urlencode("success");
+            $msg = urlencode("Liberação registrada com sucesso.");
+            header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
         } else {
             echo "Ocorreu um erro ao registrar a liberação.";
         }
     } catch (PDOException $e) {
-        echo "<strong>Error:</strong> " . $e->getMessage();
+        // echo "<strong>Error:</strong> " . $e->getMessage();
+        $msgType = urlencode("error");
+    $msg = urlencode("Ocorreu algum erro ao tentar registrar a liberção.");
+    header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
     }
 }

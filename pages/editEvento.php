@@ -1,6 +1,14 @@
 <?php
 include('../config/conexao.php');
 
+if (isset($_SESSION['nivel'])) {
+    if ($_SESSION['nivel'] !== 3) {
+        $msgType = urlencode('error');
+        $msg = urlencode('Você não tem acesso à página de edição de eventos.');
+        header("Location: home.php?sisco=corpoDoscente&msgType=$msgType&msg=$msg");
+    }
+}
+
 $discentesSelect = "SELECT tb_jmf_discente.*, tb_jmf_turma.turma_serie, tb_jmf_turma.turma_nome
            FROM tb_jmf_discente
            JOIN tb_jmf_turma ON tb_jmf_discente.discente_idTurma = tb_jmf_turma.turma_id

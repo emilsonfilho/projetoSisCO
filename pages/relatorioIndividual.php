@@ -57,30 +57,32 @@ if (isset($_GET['idTurma'])) {
       <div class="card shadow-sm rounded">
         <div class="card-body">
           <h5 class="card-title">Exibindo relatório de <?php echo $serieTurma; ?> - <?php echo $cursoNome; ?></h5>
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th class="text-center">Nº Matrícula</th>
-                <th class="text-center">Qntd. Ocorrências</th>
-                <th class="text-center">Qntd. Eventos</th>
-                <th class="text-center">Consulta</th>
-              </tr>
-            </thead>
-            <tbody>
-              <?php foreach ($alunos as $aluno) : ?>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
                 <tr>
-                  <td><?php echo $aluno['discente_nome']; ?></td>
-                  <td class="text-center"><?php echo $aluno['discente_matricula']; ?></td>
-                  <td class="text-center"><?php echo $aluno['total_ocorrencias']; ?></td>
-                  <td class="text-center"><?php echo $aluno['total_eventos']; ?></td>
-                  <td class="text-center">
-                    <a href="home.php?sisco=detalhesDiscente&matricula=<?php echo $aluno['discente_matricula']; ?>" class="btn btn-info btn-sm">Detalhes</a>
-                  </td>
+                  <th>Nome</th>
+                  <th class="text-center">Nº Matrícula</th>
+                  <th class="text-center">Qntd. Ocorrências</th>
+                  <th class="text-center">Qntd. Eventos</th>
+                  <th class="text-center">Consulta</th>
                 </tr>
-              <?php endforeach; ?>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <?php foreach ($alunos as $aluno) : ?>
+                  <tr>
+                    <td><?php echo $aluno['discente_nome']; ?></td>
+                    <td class="text-center"><?php echo $aluno['discente_matricula']; ?></td>
+                    <td class="text-center"><?php echo $aluno['total_ocorrencias']; ?></td>
+                    <td class="text-center"><?php echo $aluno['total_eventos']; ?></td>
+                    <td class="text-center">
+                      <a href="home.php?sisco=detalhesDiscente&matricula=<?php echo $aluno['discente_matricula']; ?>" class="btn btn-info btn-sm">Detalhes</a>
+                    </td>
+                  </tr>
+                <?php endforeach; ?>
+              </tbody>
+            </table>
+          </div>
           <p class="text-muted">Quantidade total de alunos: <?php echo $totalAlunos; ?></p>
           <p class="text-muted">Quantidade total de ocorrências: <?php echo $totalOcorrenciasTurma; ?></p>
           <p class="text-muted">Quantidade total de eventos: <?php echo $totalEventosTurma; ?></p>

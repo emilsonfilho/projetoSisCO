@@ -15,7 +15,7 @@ ob_start();
 session_start();
 
 if (!isset($_SESSION['loginuser']) && (!isset($_SESSION['senhauser'])) && (!isset($_SESSION['nivel']))) {
-    header('Location: ../index.php?acao=negado');
+  header('Location: ../index.php?acao=negado');
 }
 //include_once("./adminInclude/conect/conexao.php");
 include_once("logout.php");
@@ -29,7 +29,7 @@ include_once("logout.php");
   <link rel="apple-touch-icon" sizes="76x76" href="../assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="../assets/img/favicon.png">
   <title>
-   Sistema | Sistema de Controle de Ocorrências
+    Sistema | Sistema de Controle de Ocorrências
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -49,7 +49,7 @@ include_once("logout.php");
   <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0" href="../index.php">
+      <a class="navbar-brand m-0" href="#">
         <img src="../assets/img/logos/logo-saep.png" class="navbar-brand-img h-100" alt="main_logo">
         <span class="ms-1 font-weight-bold">SisCO</span>
       </a>
@@ -58,102 +58,101 @@ include_once("logout.php");
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <?php
-          // Para casos em que os usuários sejam do setor da gestão
-          if($_SESSION['nivel'] === 3){
+        // Para casos em que os usuários sejam do setor da gestão
+        if ($_SESSION['nivel'] === 3) {
         ?>
-        <!-- Nível Admin -->
-        <li class="nav-item">
-          <a class="nav-link  active" href="home.php?sisco=cadOcorrencia">
-            <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-              <img style="width: 100%" src="../assets/img/icones/painel.png" alt="">
-            </div>
-            <span class="nav-link-text ms-1">Registro de Ocorrências</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link  " href="home.php?sisco=cadEventos">
-            <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-              <img style="width: 100%" src="../assets/img/icones/usuarios.png" alt="">
-            </div>
-            <span class="nav-link-text ms-1">Registro de Eventos</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="home.php?sisco=liberacao">
-            <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-              <img style="width: 100%" src="../assets/img/icones/graduando.png" alt="">
-            </div>
-            <span class="nav-link-text ms-1">Liberações de alunos</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="home.php?sisco=relatorioTurmas">
-            <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-              <img style="width: 100%" src="../assets/img/icones/relatorio_c.png" alt="">
-            </div>
-            <span class="nav-link-text ms-1">Relatório de turmas</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="home.php?sisco=corpoDoscente">
-            <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-              <img style="width: 100%" src="../assets/img/icones/relatorio_c.png" alt="">
-            </div>
-            <span class="nav-link-text ms-1">Corpo Doscente</span>
-          </a>
-        </li>
-        <!-- Fim do nível Admin -->
+          <!-- Nível Admin -->
+          <li class="nav-item">
+            <a class="nav-link  active" href="home.php?sisco=cadOcorrencia">
+              <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <img style="width: 100%" src="../assets/img/icones/painel.png" alt="">
+              </div>
+              <span class="nav-link-text ms-1">Registro de Ocorrências</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link  " href="home.php?sisco=cadEventos">
+              <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <img style="width: 100%" src="../assets/img/icones/usuarios.png" alt="">
+              </div>
+              <span class="nav-link-text ms-1">Registro de Eventos</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="home.php?sisco=liberacao">
+              <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <img style="width: 100%" src="../assets/img/icones/graduando.png" alt="">
+              </div>
+              <span class="nav-link-text ms-1">Liberações de alunos</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="home.php?sisco=relatorioTurmas">
+              <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <img style="width: 100%" src="../assets/img/icones/relatorio_c.png" alt="">
+              </div>
+              <span class="nav-link-text ms-1">Relatório de turmas</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="home.php?sisco=corpoDoscente">
+              <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <img style="width: 100%" src="../assets/img/icones/relatorio_c.png" alt="">
+              </div>
+              <span class="nav-link-text ms-1">Corpo Doscente</span>
+            </a>
+          </li>
+          <!-- Fim do nível Admin -->
         <?php
-          }else{
+        } elseif ($_SESSION['nivel'] === 2 || $_SESSION['nivel'] === 1) {
         ?>
-        <!-- Nível Seleção Início-->
-        <li class="nav-item">
-          <a class="nav-link  active" href="home.php?sisco=">
-            <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-              <img style="width: 100%" src="../assets/img/icones/painel.png" alt="">
-            </div>
-            <span class="nav-link-text ms-1">Cadastro de Aluno(a)</span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link " href="home.php?saep=lista">
-            <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-              <img style="width: 100%" src="../assets/img/icones/lista.png" alt="">
-            </div>
-            <span class="nav-link-text ms-1">Lista de Alunos</span>
-          </a>
-        </li>
-        
-       
-        <!-- Nível Seleção Início-->
+          <li class="nav-item">
+            <a class="nav-link" href="home.php?sisco=relatorioTurmas">
+              <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <img style="width: 100%" src="../assets/img/icones/relatorio_c.png" alt="">
+              </div>
+              <span class="nav-link-text ms-1">Relatório de turmas</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="home.php?sisco=corpoDoscente">
+              <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <img style="width: 100%" src="../assets/img/icones/relatorio_c.png" alt="">
+              </div>
+              <span class="nav-link-text ms-1">Corpo Doscente</span>
+            </a>
+          </li>
         <?php
-          }
+        } else {
+        ?>
+          <!-- Nível Seleção Início-->
+          <li class="nav-item">
+            <a class="nav-link  active" href="home.php?sisco=">
+              <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <img style="width: 100%" src="../assets/img/icones/painel.png" alt="">
+              </div>
+              <span class="nav-link-text ms-1">Cadastro de Aluno(a)</span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link " href="home.php?saep=lista">
+              <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <img style="width: 100%" src="../assets/img/icones/lista.png" alt="">
+              </div>
+              <span class="nav-link-text ms-1">Lista de Alunos</span>
+            </a>
+          </li>
+
+
+          <!-- Nível Seleção Início-->
+        <?php
+        }
         ?>
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Ações</h6>
         </li>
-        <li class="nav-item">
-          <a class="nav-link  " href="home.php?saep=perfil">
-            <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-              <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                <title>customer-support</title>
-                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                  <g transform="translate(-1717.000000, -291.000000)" fill="#FFFFFF" fill-rule="nonzero">
-                    <g transform="translate(1716.000000, 291.000000)">
-                      <g transform="translate(1.000000, 0.000000)">
-                        <path class="color-background opacity-6" d="M45,0 L26,0 C25.447,0 25,0.447 25,1 L25,20 C25,20.379 25.214,20.725 25.553,20.895 C25.694,20.965 25.848,21 26,21 C26.212,21 26.424,20.933 26.6,20.8 L34.333,15 L45,15 C45.553,15 46,14.553 46,14 L46,1 C46,0.447 45.553,0 45,0 Z"></path>
-                        <path class="color-background" d="M22.883,32.86 C20.761,32.012 17.324,31 13,31 C8.676,31 5.239,32.012 3.116,32.86 C1.224,33.619 0,35.438 0,37.494 L0,41 C0,41.553 0.447,42 1,42 L25,42 C25.553,42 26,41.553 26,41 L26,37.494 C26,35.438 24.776,33.619 22.883,32.86 Z"></path>
-                        <path class="color-background" d="M13,28 C17.432,28 21,22.529 21,18 C21,13.589 17.411,10 13,10 C8.589,10 5,13.589 5,18 C5,22.529 8.568,28 13,28 Z"></path>
-                      </g>
-                    </g>
-                  </g>
-                </g>
-              </svg>
-            </div>
-            <span class="nav-link-text ms-1">Meu Perfil</span>
-          </a>
-        </li>
-        
+
+
         <li class="nav-item">
           <a class="nav-link  " href="?sair" onclick="return confirm('Deseja sair do sistema de seleção de novos alunos?')">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
@@ -178,7 +177,7 @@ include_once("logout.php");
         </li>
       </ul>
     </div>
-    
+
   </aside>
   <main class="main-content position-relative max-height-vh-100 h-100 border-radius-lg ">
     <!-- Navbar -->
@@ -192,10 +191,10 @@ include_once("logout.php");
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            
+
           </div>
           <ul class="navbar-nav  justify-content-end">
-            
+
             <li class="nav-item d-flex align-items-center">
               <a href="?sair" class="nav-link text-body font-weight-bold px-0" onclick="return confirm('Deseja sair do sistema de seleção de novos alunos?')">
                 <i class="fa fa-user me-sm-1"></i>
@@ -211,8 +210,8 @@ include_once("logout.php");
                 </div>
               </a>
             </li>
-            
-            
+
+
           </ul>
         </div>
       </div>

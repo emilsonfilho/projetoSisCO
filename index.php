@@ -137,7 +137,7 @@ include('config/conexao.php');
                                                 <strong>Você será redirecionado(a) para o painel!</strong> Aguarde »»»
                                             </div>';
 
-                                        header("Refresh: 3, pages/home.php?saep=painel");
+                                        header("Refresh: 3, pages/home.php?sisco=corpoDoscente");
                                     }
                                 } else {
                                     echo '<div class="alert alert-warning">'

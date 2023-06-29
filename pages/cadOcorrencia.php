@@ -1,6 +1,14 @@
 <?php
 include('../config/conexao.php');
 
+if (isset($_SESSION['nivel'])) {
+    if ($_SESSION['nivel'] !== 3) {
+        $msgType = urlencode('error');
+        $msg = urlencode('Você não tem acesso à página de cadastro de ocorrências.');
+        header("Location: home.php?sisco=corpoDoscente&msgType=$msgType&msg=$msg");
+    }
+}
+
 $discentesSelect = "SELECT tb_jmf_discente.*, tb_jmf_turma.turma_serie, tb_jmf_turma.turma_nome
            FROM tb_jmf_discente
            JOIN tb_jmf_turma ON tb_jmf_discente.discente_idTurma = tb_jmf_turma.turma_id
@@ -18,11 +26,34 @@ try {
 
     $motivos = $conexao->query($motivosSelect)->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
-    echo "<b>Erro: </b>" . $e->getMessage();
+    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+    echo urldecode('Ocorreu um erro ao tentar carregar a página.');
+    echo '</div>';
 }
 ?>
 
 <div class="container">
+    <?php
+    // Verificar se a mensagem está presente na URL
+    if (isset($_GET['msgType']) && isset($_GET['msg'])) {
+        $msgType = $_GET['msgType'];
+        $msg = $_GET['msg'];
+
+        // Verificar o tipo de mensagem e exibir a mensagem correspondente
+        if ($msgType === 'success') {
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">';
+            echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+            echo urldecode($msg);
+            echo '</div>';
+        } elseif ($msgType === 'error') {
+            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+            echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+            echo urldecode($msg);
+            echo '</div>';
+        }
+    }
+    ?>
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm rounded">
@@ -85,54 +116,50 @@ try {
                     Dados de Ocorrências
                 </div>
                 <div class="card-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th class="text-center">Turma</th>
-                                <th class="text-center">Ocorrências</th>
-                                <th class="text-center">Eventos</th>
-                                <!-- Adicione mais colunas conforme necessário -->
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
-                            $turmaSelect = "SELECT tb_jmf_turma.turma_id, tb_jmf_turma.turma_nome, tb_jmf_turma.turma_serie, 
-                COUNT(DISTINCT tb_sisco_ocorrencia.ocorrencia_id) AS total_ocorrencias, 
-                COUNT(DISTINCT tb_sisco_evento.evento_id) AS total_eventos
-                FROM tb_jmf_turma
-                INNER JOIN tb_jmf_discente ON tb_jmf_turma.turma_id = tb_jmf_discente.discente_idTurma
-                LEFT JOIN tb_sisco_ocorrencia ON tb_jmf_discente.discente_matricula = tb_sisco_ocorrencia.ocorrencia_idDiscente
-                LEFT JOIN tb_sisco_evento ON tb_jmf_discente.discente_matricula = tb_sisco_evento.evento_idDiscente
-                GROUP BY tb_jmf_turma.turma_id";
-
-                            try {
-                                $stmtTurmas = $conexao->prepare($turmaSelect);
-                                $stmtTurmas->execute();
-                                $turmas = $stmtTurmas->fetchAll(PDO::FETCH_ASSOC);
-
-                                foreach ($turmas as $turma) {
-                                    $turmaNome = $turma['turma_serie'] . "-" . $turma['turma_nome'];
-                                    $totalOcorrencias = $turma['total_ocorrencias'];
-                                    $totalEventos = $turma['total_eventos'];
-
-                                    // Exibe a linha da tabela com os dados da turma
-                            ?>
-                                    <tr>
-                                        <td class="text-center"><?php echo $turmaNome; ?></td>
-                                        <td class="text-center"><?php echo $totalOcorrencias; ?></td>
-                                        <td class="text-center"><?php echo $totalEventos; ?></td>
-                                    </tr>
-                            <?php
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Turma</th>
+                                    <th class="text-center">Ocorrências</th>
+                                    <th class="text-center">Eventos</th>
+                                    <!-- Adicione mais colunas conforme necessário -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
+                                $turmaSelect = "SELECT tb_jmf_turma.turma_id, tb_jmf_turma.turma_nome, tb_jmf_turma.turma_serie, 
+                                        COUNT(DISTINCT tb_sisco_ocorrencia.ocorrencia_id) AS total_ocorrencias, 
+                                        COUNT(DISTINCT tb_sisco_evento.evento_id) AS total_eventos
+                                        FROM tb_jmf_turma
+                                        INNER JOIN tb_jmf_discente ON tb_jmf_turma.turma_id = tb_jmf_discente.discente_idTurma
+                                        LEFT JOIN tb_sisco_ocorrencia ON tb_jmf_discente.discente_matricula = tb_sisco_ocorrencia.ocorrencia_idDiscente
+                                        LEFT JOIN tb_sisco_evento ON tb_jmf_discente.discente_matricula = tb_sisco_evento.evento_idDiscente
+                                        GROUP BY tb_jmf_turma.turma_id";
+                                try {
+                                    $stmtTurmas = $conexao->prepare($turmaSelect);
+                                    $stmtTurmas->execute();
+                                    $turmas = $stmtTurmas->fetchAll(PDO::FETCH_ASSOC);
+                                    foreach ($turmas as $turma) {
+                                        $turmaNome = $turma['turma_serie'] . "-" . $turma['turma_nome'];
+                                        $totalOcorrencias = $turma['total_ocorrencias'];
+                                        $totalEventos = $turma['total_eventos'];
+                                        // Exibe a linha da tabela com os dados da turma
+                                ?>
+                                        <tr>
+                                            <td class="text-center"><?php echo $turmaNome; ?></td>
+                                            <td class="text-center"><?php echo $totalOcorrencias; ?></td>
+                                            <td class="text-center"><?php echo $totalEventos; ?></td>
+                                        </tr>
+                                <?php
+                                    }
+                                } catch (\Throwable $th) {
+                                    // Tratamento de erro
                                 }
-                            } catch (\Throwable $th) {
-                                // Tratamento de erro
-                            }
-                            ?>
-                        </tbody>
-
-
-
-                    </table>
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

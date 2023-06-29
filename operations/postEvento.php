@@ -18,13 +18,18 @@ try {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($row === false) {
-        echo "E-mail não encontrado no banco de dados";
+        $msgType = urlencode("error");
+        $msg = urlencode("E-mail não encontrado no banco de dados");
+        header("Location: ../pages/home.php?sisco=cadEventos&msgType=$msgType&msg=$msg");
         exit;
     }
 
     $idColaborador = $row['colaborador_matricula'];
 } catch (PDOException $e) {
-    echo "<strong>Error:</strong>" . $e->getMessage();
+    // echo "<strong>Error:</strong>" . $e->getMessage();
+    $msgType = urlencode("error");
+    $msg = urlencode("Ocorreu um erro ao cadastrar o evento.");
+    header("Location: ../pages/home.php?sisco=cadEventos&msgType=$msgType&msg=$msg");
 }
 
 
@@ -42,13 +47,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $rowResponsavelLegal = $stmtResponsavelLegal->fetch(PDO::FETCH_ASSOC);
 
         if ($rowResponsavelLegal === false) {
-            echo "Responsável legal não encontrado no banco de dados";
+            $msgType = urlencode("error");
+            $msg = urlencode("Responsável legal não encontrado no banco de dados");
+            header("Location: ../pages/home.php?sisco=cadEventos&msgType=$msgType&msg=$msg");
             exit;
         }
 
         $evento_idResponsavelLegal = $rowResponsavelLegal['discente_idResponsavel'];
     } catch (PDOException $e) {
-        echo "<strong>Error:</strong>" . $e->getMessage();
+        // echo "<strong>Error:</strong>" . $e->getMessage();
+        $msgType = urlencode("error");
+        $msg = urlencode("Ocorreu um erro ao cadastrar o evento.");
+        header("Location: ../pages/home.php?sisco=cadEventos&msgType=$msgType&msg=$msg");
     }
 
     // Outro select para pegar a categoria correspondente
@@ -63,14 +73,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $rowCategoria = $stmtCategoria->fetch(PDO::FETCH_ASSOC);
 
         if ($rowCategoria === false) {
-            echo "Categoria não encontrada no banco de dados";
+            $msgType = urlencode("error");
+            $msg = urlencode("Categoria não encontrada no banco de dados.");
+            header("Location: ../pages/home.php?sisco=cadEventos&msgType=$msgType&msg=$msg");
             exit;
         }
 
         $evento_idCategoria = $rowCategoria['eventoMotivo_idCategoria'];
         var_dump($evento_idCategoria);
     } catch (PDOException $e) {
-        echo "<strong>Error:</strong>" . $e->getMessage();
+        // echo "<strong>Error:</strong>" . $e->getMessage();
+        $msgType = urlencode("error");
+        $msg = urlencode("Ocorreu um erro ao cadastrar o evento.");
+        header("Location: ../pages/home.php?sisco=cadEventos&msgType=$msgType&msg=$msg");
     }
 
     $evento_data = $_POST['evento_data'];
@@ -102,11 +117,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Verificar se a inserção foi bem-sucedida
         if ($stmtInserirevento->rowCount() > 0) {
-            echo "Evento registrado com sucesso!";
+            $msgType = urlencode("success");
+            $msg = urlencode("Evento registrado com sucesso!");
+            header("Location: ../pages/home.php?sisco=cadEventos&msgType=$msgType&msg=$msg");
+            exit;
         } else {
-            echo "Ocorreu um erro ao registrar o evento.";
+            $msgType = urlencode("error");
+            $msg = urlencode("Ocorreu um erro ao cadastrar o evento.");
+            header("Location: ../pages/home.php?sisco=cadEventos&msgType=$msgType&msg=$msg");
+            exit;
         }
     } catch (PDOException $e) {
-        echo "<strong>Error:</strong> " . $e->getMessage();
+        // echo "<strong>Error:</strong> " . $e->getMessage();
+        $msgType = urlencode("error");
+        $msg = urlencode("Ocorreu um erro ao cadastrar o evento.");
+        header("Location: ../pages/home.php?sisco=cadEventos&msgType=$msgType&msg=$msg");
     }
 }

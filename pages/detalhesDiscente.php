@@ -43,8 +43,8 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
         foreach ($ocorrencias as $index => $ocorrencia) {
             $ocorrenciasFormatadas[$index]['numero'] = $index + 1;
             $ocorrenciasFormatadas[$index]['motivo'] = $ocorrencia['ocorrenciaMotivo_nome'];
-            $ocorrenciasFormatadas[$index]['descricao'] = $ocorrencia['ocorrencia_descricao'];
-            $ocorrenciasFormatadas[$index]['data_hora'] = date('d/m/Y', strtotime($ocorrencia['ocorrencia_data'])) . ' - ' . $ocorrencia['ocorrencia_hora'];
+            $ocorrenciasFormatadas[$index]['descricao'] = !empty($ocorrencia['ocorrencia_descricao']) ? $ocorrencia['ocorrencia_descricao'] : '-';
+            $ocorrenciasFormatadas[$index]['data_hora'] = date('d/m/Y H:i', strtotime($ocorrencia['ocorrencia_data'] . ' ' . $ocorrencia['ocorrencia_hora']));
             $ocorrenciasFormatadas[$index]['responsavel'] = $ocorrencia['colaborador_nome'];
             $ocorrenciasFormatadas[$index]['id'] = $ocorrencia['ocorrencia_id'];
         }
@@ -65,8 +65,8 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
         foreach ($eventos as $index => $evento) {
             $eventosFormatados[$index]['numero'] = $index + 1;
             $eventosFormatados[$index]['motivo'] = $evento['eventoMotivo_nome'];
-            $eventosFormatados[$index]['observacao'] = $evento['evento_observacao'];
-            $eventosFormatados[$index]['data_hora'] = date('d/m/Y', strtotime($evento['evento_data'])) . ' - ' . $evento['evento_hora'];
+            $eventosFormatados[$index]['observacao'] = !empty($evento['evento_observacao']) ? $evento['evento_observacao'] : '-';
+            $eventosFormatados[$index]['data_hora'] = date('d/m/Y H:i', strtotime($evento['evento_data'] . ' ' . $evento['evento_hora']));
             $eventosFormatados[$index]['responsavel'] = $evento['colaborador_nome'];
             $eventosFormatados[$index]['id'] = $evento['evento_id'];
         }
@@ -129,7 +129,14 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                 <th class="text-center">Observação</th>
                                                 <th class="text-center">Data e Hora</th>
                                                 <th class="text-center">Coordenador Responsável</th>
-                                                <th class="text-center">Ações</th>
+                                                <?php
+                                                if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 3) {
+                                                    // Exibe o botão de edição somente se o nível for 3
+                                                ?>
+                                                    <th class="text-center">Ações</th>
+                                                <?php
+                                                }
+                                                ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -140,9 +147,17 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                     <td class="text-center"><?php echo $ocorrencia['descricao']; ?></td>
                                                     <td class="text-center"><?php echo $ocorrencia['data_hora']; ?></td>
                                                     <td class="text-center"><?php echo $ocorrencia['responsavel']; ?></td>
-                                                    <td class="text-center">
-                                                        <a href="home.php?sisco=editOcorrencia&idOcorrencia=<?php echo $evento['id']; ?>" class="btn btn-primary">Editar</a>
-                                                    </td>
+                                                    <?php
+                                                    if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 3) {
+                                                        // Exibe o botão de edição somente se o nível for 3
+                                                    ?>
+                                                        <td class="text-center">
+                                                            <a href="home.php?sisco=editOcorrencia&idOcorrencia=<?php echo $ocorrencia['id']; ?>" class="btn btn-primary">Editar</a>
+                                                        </td>
+                                                    <?php
+                                                    }
+                                                    ?>
+
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
@@ -176,7 +191,14 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                 <th class="text-center">Observação</th>
                                                 <th class="text-center">Data e Hora</th>
                                                 <th class="text-center">Coordenador Responsável</th>
-                                                <th class="text-center">Ações</th>
+                                                <?php
+                                                if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 3) {
+                                                    // Exibe o botão de edição somente se o nível for 3
+                                                ?>
+                                                    <th class="text-center">Ações</th>
+                                                <?php
+                                                }
+                                                ?>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -187,9 +209,16 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                     <td class="text-center"><?php echo $evento['observacao']; ?></td>
                                                     <td class="text-center"><?php echo $evento['data_hora']; ?></td>
                                                     <td class="text-center"><?php echo $evento['responsavel']; ?></td>
-                                                    <td class="text-center">
-                                                        <a href="home.php?sisco=editEvento&idEvento=<?php echo $evento['id']; ?>" class="btn btn-primary">Editar</a>
-                                                    </td>
+                                                    <?php
+                                                    if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 3) {
+                                                        // Exibe o botão de edição somente se o nível for 3
+                                                    ?>
+                                                        <td class="text-center">
+                                                            <a href="home.php?sisco=editOcorrencia&idOcorrencia=<?php echo $ocorrencia['id']; ?>" class="btn btn-primary">Editar</a>
+                                                        </td>
+                                                    <?php
+                                                    }
+                                                    ?>
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
