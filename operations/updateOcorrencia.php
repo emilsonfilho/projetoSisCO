@@ -27,12 +27,11 @@ try {
     echo "<strong>Error:</strong>" . $e->getMessage();
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $ocorrencia_id = $_GET['idOcorrencia'];
     $ocorrencia_idDiscente = $_POST['discente_matricula'];
     $ocorrencia_idColaborador = $idColaborador;
 
-    // Esse select teve que ficar aqui porque ele depende de um valor que é o id do discente
     $selectResponsavelLegal = "SELECT discente_idResponsavel FROM tb_jmf_discente WHERE discente_matricula = :matricula";
 
     try {
@@ -78,34 +77,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ocorrencia_dataTime = date('Y-m-d H:i:s');
 
     try {
-        // Preparar a consulta SQL para inserir os dados na tabela de ocorrências
-        $inserirOcorrencia = "INSERT INTO tb_sisco_ocorrencia (ocorrencia_idDiscente, ocorrencia_idColaborador, ocorrencia_idResponsavelLegal, ocorrencia_idCategoria, ocorrencia_idMotivo, ocorrencia_data, ocorrencia_hora, ocorrencia_descricao, ocorrencia_dataTime)
-                              VALUES (:idDiscente, :idColaborador, :idResponsavelLegal, :idCategoria, :idMotivo, :data, :hora, :descricao, :dataTime)";
+        $update = "UPDATE tb_sisco_ocorrencia SET ocorrencia_idDiscente = :idDiscente, ocorrencia_idColaborador = :idColaborador, ocorrencia_idResponsavelLegal = :idResponsavelLegal, ocorrencia_idCategoria = :idCategoria, ocorrencia_idMotivo = :idMotivo, ocorrencia_data = :data, ocorrencia_hora = :hora, ocorrencia_descricao = :descricao, ocorrencia_dataTime = :dataTime WHERE ocorrencia_id = :id";
 
-        // Preparar a declaração
-        $stmtInserirOcorrencia = $conexao->prepare($inserirOcorrencia);
+        $stmtUpdate = $conexao->prepare($update);
+        $stmtUpdate->bindValue(':idDiscente', $ocorrencia_idDiscente);
+        $stmtUpdate->bindValue(':idColaborador', $ocorrencia_idColaborador);
+        $stmtUpdate->bindValue(':idResponsavelLegal', $ocorrencia_idResponsavelLegal);
+        $stmtUpdate->bindValue(':idCategoria', $ocorrencia_idCategoria);
+        $stmtUpdate->bindValue(':idMotivo', $ocorrencia_idMotivo);
+        $stmtUpdate->bindValue(':data', $ocorrencia_data);
+        $stmtUpdate->bindValue(':hora', $ocorrencia_hora);
+        $stmtUpdate->bindValue(':descricao', $ocorrencia_descricao);
+        $stmtUpdate->bindValue(':dataTime', $ocorrencia_dataTime);
+        $stmtUpdate->bindValue(':id', $ocorrencia_id);
 
-        // Vincular os valores aos parâmetros da consulta
-        $stmtInserirOcorrencia->bindValue(':idDiscente', $ocorrencia_idDiscente);
-        $stmtInserirOcorrencia->bindValue(':idColaborador', $ocorrencia_idColaborador);
-        $stmtInserirOcorrencia->bindValue(':idResponsavelLegal', $ocorrencia_idResponsavelLegal);
-        $stmtInserirOcorrencia->bindValue(':idMotivo', $ocorrencia_idMotivo);
-        $stmtInserirOcorrencia->bindValue(':idCategoria', $ocorrencia_idCategoria);
-        $stmtInserirOcorrencia->bindValue(':data', $ocorrencia_data);
-        $stmtInserirOcorrencia->bindValue(':hora', $ocorrencia_hora);
-        $stmtInserirOcorrencia->bindValue(':descricao', $ocorrencia_descricao);
-        $stmtInserirOcorrencia->bindValue(':dataTime', $ocorrencia_dataTime);
+        $stmtUpdate->execute();
 
-        // Executar a consulta
-        $stmtInserirOcorrencia->execute();
-
-        // Verificar se a inserção foi bem-sucedida
-        if ($stmtInserirOcorrencia->rowCount() > 0) {
-            echo "Ocorrência registrada com sucesso!";
+        if ($stmt->rowCount() > 0) {
+            header("Location: home.php?sisco=detalhesDiscente&matricula=" . $ocorrencia_idDiscente);
         } else {
-            echo "Ocorreu um erro ao registrar a ocorrência.";
+            echo "Falha ao atualizar a ocorrência";
         }
     } catch (PDOException $e) {
-        echo "<strong>Error:</strong> " . $e->getMessage();
+        echo "<strong>Error:</strong>" . $e->getMessage();
     }
 }

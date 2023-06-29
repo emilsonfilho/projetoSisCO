@@ -29,15 +29,15 @@ try {
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $ocorrencia_idDiscente = $_POST['discente_matricula'];
-    $ocorrencia_idColaborador = $idColaborador;
+    $evento_idDiscente = $_POST['discente_matricula'];
+    $evento_idColaborador = $idColaborador;
 
     // Esse select teve que ficar aqui porque ele depende de um valor que é o id do discente
     $selectResponsavelLegal = "SELECT discente_idResponsavel FROM tb_jmf_discente WHERE discente_matricula = :matricula";
 
     try {
         $stmtResponsavelLegal = $conexao->prepare($selectResponsavelLegal);
-        $stmtResponsavelLegal->bindValue(':matricula', $ocorrencia_idDiscente);
+        $stmtResponsavelLegal->bindValue(':matricula', $evento_idDiscente);
         $stmtResponsavelLegal->execute();
         $rowResponsavelLegal = $stmtResponsavelLegal->fetch(PDO::FETCH_ASSOC);
 
@@ -46,19 +46,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
 
-        $ocorrencia_idResponsavelLegal = $rowResponsavelLegal['discente_idResponsavel'];
+        $evento_idResponsavelLegal = $rowResponsavelLegal['discente_idResponsavel'];
     } catch (PDOException $e) {
         echo "<strong>Error:</strong>" . $e->getMessage();
     }
 
     // Outro select para pegar a categoria correspondente
-    $ocorrencia_idMotivo = $_POST['ocorrencia_idMotivo'];
+    $evento_idMotivo = $_POST['evento_idMotivo'];
 
-    $selectCategoria = "SELECT ocorrenciaMotivo_idCategoria FROM tb_sisco_ocorrenciamotivo WHERE ocorrenciaMotivo_id = :idMotivo";
+    $selectCategoria = "SELECT eventoMotivo_idCategoria FROM tb_sisco_eventomotivo WHERE eventoMotivo_id = :idMotivo";
 
     try {
         $stmtCategoria = $conexao->prepare($selectCategoria);
-        $stmtCategoria->bindValue(':idMotivo', $ocorrencia_idMotivo);
+        $stmtCategoria->bindValue(':idMotivo', $evento_idMotivo);
         $stmtCategoria->execute();
         $rowCategoria = $stmtCategoria->fetch(PDO::FETCH_ASSOC);
 
@@ -67,43 +67,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             exit;
         }
 
-        $ocorrencia_idCategoria = $rowCategoria['ocorrenciaMotivo_idCategoria'];
+        $evento_idCategoria = $rowCategoria['eventoMotivo_idCategoria'];
+        var_dump($evento_idCategoria);
     } catch (PDOException $e) {
         echo "<strong>Error:</strong>" . $e->getMessage();
     }
 
-    $ocorrencia_data = $_POST['ocorrencia_data'];
-    $ocorrencia_hora = $_POST['ocorrencia_hora'];
-    $ocorrencia_descricao = $_POST['ocorrencia_descricao'];
-    $ocorrencia_dataTime = date('Y-m-d H:i:s');
+    $evento_data = $_POST['evento_data'];
+    $evento_hora = $_POST['evento_hora'];
+    $evento_descricao = $_POST['evento_observacao'];
+    $evento_dataTime = date('Y-m-d H:i:s');
 
     try {
         // Preparar a consulta SQL para inserir os dados na tabela de ocorrências
-        $inserirOcorrencia = "INSERT INTO tb_sisco_ocorrencia (ocorrencia_idDiscente, ocorrencia_idColaborador, ocorrencia_idResponsavelLegal, ocorrencia_idCategoria, ocorrencia_idMotivo, ocorrencia_data, ocorrencia_hora, ocorrencia_descricao, ocorrencia_dataTime)
+        $inserirevento = "INSERT INTO tb_sisco_evento (evento_idDiscente, evento_idColaborador, evento_idResponsavel, evento_idCategoria, evento_idMotivo, evento_data, evento_hora, evento_observacao, evento_dateTime)
                               VALUES (:idDiscente, :idColaborador, :idResponsavelLegal, :idCategoria, :idMotivo, :data, :hora, :descricao, :dataTime)";
 
         // Preparar a declaração
-        $stmtInserirOcorrencia = $conexao->prepare($inserirOcorrencia);
+        $stmtInserirevento = $conexao->prepare($inserirevento);
 
         // Vincular os valores aos parâmetros da consulta
-        $stmtInserirOcorrencia->bindValue(':idDiscente', $ocorrencia_idDiscente);
-        $stmtInserirOcorrencia->bindValue(':idColaborador', $ocorrencia_idColaborador);
-        $stmtInserirOcorrencia->bindValue(':idResponsavelLegal', $ocorrencia_idResponsavelLegal);
-        $stmtInserirOcorrencia->bindValue(':idMotivo', $ocorrencia_idMotivo);
-        $stmtInserirOcorrencia->bindValue(':idCategoria', $ocorrencia_idCategoria);
-        $stmtInserirOcorrencia->bindValue(':data', $ocorrencia_data);
-        $stmtInserirOcorrencia->bindValue(':hora', $ocorrencia_hora);
-        $stmtInserirOcorrencia->bindValue(':descricao', $ocorrencia_descricao);
-        $stmtInserirOcorrencia->bindValue(':dataTime', $ocorrencia_dataTime);
+        $stmtInserirevento->bindValue(':idDiscente', $evento_idDiscente);
+        $stmtInserirevento->bindValue(':idColaborador', $evento_idColaborador);
+        $stmtInserirevento->bindValue(':idResponsavelLegal', $evento_idResponsavelLegal);
+        $stmtInserirevento->bindValue(':idMotivo', $evento_idMotivo);
+        $stmtInserirevento->bindValue(':idCategoria', $evento_idCategoria);
+        $stmtInserirevento->bindValue(':data', $evento_data);
+        $stmtInserirevento->bindValue(':hora', $evento_hora);
+        $stmtInserirevento->bindValue(':descricao', $evento_descricao);
+        $stmtInserirevento->bindValue(':dataTime', $evento_dataTime);
 
         // Executar a consulta
-        $stmtInserirOcorrencia->execute();
+        $stmtInserirevento->execute();
 
         // Verificar se a inserção foi bem-sucedida
-        if ($stmtInserirOcorrencia->rowCount() > 0) {
-            echo "Ocorrência registrada com sucesso!";
+        if ($stmtInserirevento->rowCount() > 0) {
+            echo "Evento registrado com sucesso!";
         } else {
-            echo "Ocorreu um erro ao registrar a ocorrência.";
+            echo "Ocorreu um erro ao registrar o evento.";
         }
     } catch (PDOException $e) {
         echo "<strong>Error:</strong> " . $e->getMessage();

@@ -124,8 +124,7 @@ include('config/conexao.php');
                                     $_SESSION['senhauser'] = $senha;
                                     
                                     /* Usadas no profile.php para mostrar dados do usuário logado */
-                                    $_SESSION['nivel'] = intval($nivel->colaborador_codigoSetor);
-                                    var_dump($_SESSION['nivel']);
+                                    $_SESSION['nivel'] = intval($nivel->colaborador_idSetor);
 
                                     if ($_SESSION['nivel'] === 3) {
                                       echo '<div class="alert alert-success">

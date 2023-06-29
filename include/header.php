@@ -71,7 +71,7 @@ include_once("logout.php");
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link  " href="home.php?saep=usuarios">
+          <a class="nav-link  " href="home.php?sisco=cadEventos">
             <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <img style="width: 100%" src="../assets/img/icones/usuarios.png" alt="">
             </div>
@@ -79,7 +79,7 @@ include_once("logout.php");
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link  " href="home.php?saep=cursos">
+          <a class="nav-link" href="home.php?sisco=liberacao">
             <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <img style="width: 100%" src="../assets/img/icones/graduando.png" alt="">
             </div>
@@ -87,7 +87,7 @@ include_once("logout.php");
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="home.php?saep=regras">
+          <a class="nav-link" href="home.php?sisco=relatorioTurmas">
             <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <img style="width: 100%" src="../assets/img/icones/relatorio_c.png" alt="">
             </div>
@@ -95,7 +95,7 @@ include_once("logout.php");
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="home.php?saep=regras">
+          <a class="nav-link" href="home.php?sisco=corpoDoscente">
             <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <img style="width: 100%" src="../assets/img/icones/relatorio_c.png" alt="">
             </div>
@@ -108,7 +108,7 @@ include_once("logout.php");
         ?>
         <!-- Nível Seleção Início-->
         <li class="nav-item">
-          <a class="nav-link  active" href="home.php?saep=cadAluno">
+          <a class="nav-link  active" href="home.php?sisco=">
             <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <img style="width: 100%" src="../assets/img/icones/painel.png" alt="">
             </div>

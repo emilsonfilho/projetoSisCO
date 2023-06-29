@@ -7,7 +7,7 @@
                 © <script>
                   document.write(new Date().getFullYear())
                 </script>,
-                Sistema de Seleção para EP <i class="fa fa-heart"></i> Licença Livre
+                Sistema de Controle de Ocorrências <i class="fa fa-heart"></i> Licença Livre
                 
               </div>
             </div>
