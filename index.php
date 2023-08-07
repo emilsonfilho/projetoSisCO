@@ -98,10 +98,10 @@ include('config/conexao.php');
                         endif;
 
                         if (isset($_POST['loginSaep'])):
-                            // $login = trim(strip_tags($_POST['login']));
-                            // $senha = md5(trim(strip_tags($_POST['senha'])));
-                            $login = $_POST['login'];
-                            $senha = $_POST['senha'];
+                            $login = trim(strip_tags($_POST['login']));
+                            $senha = md5(trim(strip_tags($_POST['senha'])));
+                            // $login = $_POST['login'];
+                            // $senha = $_POST['senha'];
 
 
 

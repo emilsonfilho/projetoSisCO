@@ -74,6 +74,26 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
 ?>
 
         <div class="container">
+            <?php
+            // Verificar se a mensagem está presente na URL
+            if (isset($_GET['msgType']) && isset($_GET['msg'])) {
+                $msgType = $_GET['msgType'];
+                $msg = $_GET['msg'];
+
+                // Verificar o tipo de mensagem e exibir a mensagem correspondente
+                if ($msgType === 'success') {
+                    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">';
+                    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                    echo urldecode($msg);
+                    echo '</div>';
+                } elseif ($msgType === 'error') {
+                    echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+                    echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+                    echo urldecode($msg);
+                    echo '</div>';
+                }
+            }
+            ?>
             <div class="row">
                 <div class="col-md-12">
                     <div class="card shadow-sm rounded">
@@ -214,7 +234,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                         // Exibe o botão de edição somente se o nível for 3
                                                     ?>
                                                         <td class="text-center">
-                                                            <a href="home.php?sisco=editOcorrencia&idOcorrencia=<?php echo $ocorrencia['id']; ?>" class="btn btn-primary">Editar</a>
+                                                            <a href="home.php?sisco=editEvento&idEvento=<?php echo $ocorrencia['id']; ?>" class="btn btn-primary">Editar</a>
                                                         </td>
                                                     <?php
                                                     }

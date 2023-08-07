@@ -94,10 +94,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtUpdate->execute();
 
         if ($stmt->rowCount() > 0) {
-            // header("Location: home.php?sisco=detalhesDiscente&matricula=" . $evento_idDiscente);
-            echo "Evento atualizado com sucesso.";
+            $msgType = urlencode("success");
+            $msg = urlencode("Evento atualizado com sucesso.");
+            header("Location: ../pages/home.php?sisco=detalhesDiscente&matricula=$evento_idDiscente&msgType=$msgType&msg=$msg");
         } else {
-            echo "Falha ao atualizar a ocorrência";
+            $msgType = urlencode("error");
+            $msg = urlencode("Falha ao atualizar o evento.");
+            header("Location: ../pages/home.php?sisco=detalhesDiscente&matricula=$evento_idDiscente&msgType=$msgType&msg=$msg");
         }
     } catch (PDOException $e) {
         echo "<strong>Error:</strong>" . $e->getMessage();

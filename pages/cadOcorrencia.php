@@ -42,12 +42,12 @@ try {
 
         // Verificar o tipo de mensagem e exibir a mensagem correspondente
         if ($msgType === 'success') {
-            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">';
+            echo '<div id="alert-container" class="alert alert-success alert-dismissible fade show" role="alert">';
             echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
             echo urldecode($msg);
             echo '</div>';
         } elseif ($msgType === 'error') {
-            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">';
+            echo '<div id="alert-container" class="alert alert-danger alert-dismissible fade show" role="alert">';
             echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
             echo urldecode($msg);
             echo '</div>';
@@ -55,7 +55,7 @@ try {
     }
     ?>
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-6" style="margin-bottom: 12px;">
             <div class="card shadow-sm rounded">
                 <div class="card-body">
                     <h5 class="card-title">Cadastro de Ocorrências</h5>
@@ -83,11 +83,11 @@ try {
                         </div>
                         <div class="mb-3">
                             <label for="inputData" class="form-label">Data</label>
-                            <input type="date" class="form-control" id="inputData" name="ocorrencia_data" required>
+                            <input type="date" class="form-control" id="inputData" name="ocorrencia_data" required value="<?php echo date("Y-m-d") ?>">
                         </div>
                         <div class="mb-3">
                             <label for="inputHora" class="form-label">Hora</label>
-                            <input type="time" class="form-control" id="inputHora" name="ocorrencia_hora" required>
+                            <input type="time" class="form-control" id="inputHora" name="ocorrencia_hora" required value="<?php echo date("H:i") ?>">
                         </div>
                         <div class="mb-3">
                             <label for="inputMotivo" class="form-label">Motivo</label>

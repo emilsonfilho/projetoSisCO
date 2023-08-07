@@ -58,15 +58,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
     }
 
-    $liberacao_data = $_POST['liberacao_dtSaida'];
-    $liberacao_hora = $_POST['liberacao_hrSaida'];
-    $liberacao_observacao = $_POST['liberacao_observacao'];
+    $liberacao_tipo = $_POST['tipoLiberacao'];
     $liberacao_dateTime = date('Y-m-d H:i:s');
+
+    $liberacao_data = $_POST['liberacao_dt'];
+    $liberacao_hora = $_POST['liberacao_hr'];
+
+    if ($liberacao_tipo == 'retorno') {
+        $colunaData = 'liberacao_dtRetorno';
+        $colunaHora = 'liberacao_hrRetorno';
+    } else {
+        $colunaData = 'liberacao_dtSaida';
+        $colunaHora = 'liberacao_hrSaida';
+    }
+
+    $liberacao_observacao = $_POST['liberacao_observacao'];
 
     try {
         // Preparar a consulta SQL para inserir os dados na tabela de ocorrências
-        $inserirliberacao = "INSERT INTO tb_sisco_liberacao (liberacao_idDiscente, liberacao_idColaboradorSaida, liberacao_idResponsavel, liberacao_dtSaida, liberacao_hrSaida, liberacao_observacao, liberacao_dateTime)
-                              VALUES (:idDiscente, :idColaboradorSaida, :idResponsavel, :dtSaida, :hrSaida, :observacao, :dateTime)";
+        $inserirliberacao = "INSERT INTO tb_sisco_liberacao (liberacao_idDiscente, liberacao_idColaboradorSaida, liberacao_idResponsavel, $colunaData, $colunaHora, liberacao_observacao, liberacao_dateTime)
+                              VALUES (:idDiscente, :idColaboradorSaida, :idResponsavel, :dt, :hr, :observacao, :dateTime)";
 
         // Preparar a declaração
         $stmtInserirliberacao = $conexao->prepare($inserirliberacao);
@@ -75,8 +86,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmtInserirliberacao->bindValue(':idDiscente', $liberacao_idDiscente);
         $stmtInserirliberacao->bindValue(':idColaboradorSaida', $liberacao_idColaborador);
         $stmtInserirliberacao->bindValue(':idResponsavel', $liberacao_idResponsavel);
-        $stmtInserirliberacao->bindValue(':dtSaida', $liberacao_data);
-        $stmtInserirliberacao->bindValue(':hrSaida', $liberacao_hora);
+        $stmtInserirliberacao->bindValue(':dt', $liberacao_data);
+        $stmtInserirliberacao->bindValue(':hr', $liberacao_hora);
         $stmtInserirliberacao->bindValue(':observacao', $liberacao_observacao);
         $stmtInserirliberacao->bindValue(':dateTime', $liberacao_dateTime);
 
@@ -89,12 +100,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $msg = urlencode("Liberação registrada com sucesso.");
             header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
         } else {
-            echo "Ocorreu um erro ao registrar a liberação.";
+            $msgType = urlencode("error");
+            $msg = urlencode("Ocorreu um erro ao registrar a liberação.");
+            header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
         }
     } catch (PDOException $e) {
-        // echo "<strong>Error:</strong> " . $e->getMessage();
-        $msgType = urlencode("error");
-    $msg = urlencode("Ocorreu algum erro ao tentar registrar a liberção.");
-    header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
+        echo "<strong>Error:</strong> " . $e->getMessage();
+    //     $msgType = urlencode("error");
+    // $msg = urlencode("Ocorreu algum erro ao tentar registrar a liberção.");
+    // header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
     }
 }

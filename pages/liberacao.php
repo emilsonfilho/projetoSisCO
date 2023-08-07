@@ -40,7 +40,7 @@ if (isset($_GET['pagina'])) {
 $offset = ($paginaAtual - 1) * $registrosPorPagina;
 
 // Consulta SQL para obter as liberações com paginação
-$liberacoesSelect = "SELECT tb_sisco_liberacao.liberacao_id, tb_sisco_liberacao.liberacao_dtSaida, tb_sisco_liberacao.liberacao_hrSaida, tb_jmf_colaborador.colaborador_nome, tb_sisco_liberacao.liberacao_observacao, tb_sisco_liberacao.liberacao_idDiscente
+$liberacoesSelect = "SELECT tb_sisco_liberacao.liberacao_id, tb_sisco_liberacao.liberacao_dtSaida, tb_sisco_liberacao.liberacao_hrSaida, tb_sisco_liberacao.liberacao_dtRetorno, tb_sisco_liberacao.liberacao_hrRetorno, tb_jmf_colaborador.colaborador_nome, tb_sisco_liberacao.liberacao_observacao, tb_sisco_liberacao.liberacao_idDiscente
            FROM tb_sisco_liberacao
            JOIN tb_jmf_colaborador ON tb_sisco_liberacao.liberacao_idColaboradorSaida = tb_jmf_colaborador.colaborador_matricula
            ORDER BY tb_sisco_liberacao.liberacao_id DESC LIMIT :offset, :registrosPorPagina";
@@ -123,15 +123,26 @@ $totalPaginas = ceil($totalRegistros / $registrosPorPagina);
                                     <label for="inputTurma" class="form-label">Turma</label>
                                     <input type="text" class="form-control" id="inputTurma" placeholder="Turma" readonly required>
                                 </div>
+                                <div class="mb-3">
+                                    <label for="tipoLiberacao" class="form-label">Tipo da liberação</label>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tipoLiberacao" id="inputEntrada" value="retorno" required>
+                                        <label class="form-check-label" for="inputEntrada">Entrada</label>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="tipoLiberacao" id="inputSaida" value="saida" required checked>
+                                        <label class="form-check-label" for="inputSaida">Saída</label>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-lg-6">
                                 <div class="mb-3">
-                                    <label for="inputData" class="form-label">Data de Saída</label>
-                                    <input type="date" class="form-control" id="inputDataEntrada" name="liberacao_dtSaida" required value="<?php echo date("Y-m-d") ?>">
+                                    <label for="inputData" class="form-label">Data</label>
+                                    <input type="date" class="form-control" id="inputDataEntrada" name="liberacao_dt" required value="<?php echo date("Y-m-d") ?>">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="inputHora" class="form-label">Hora de Saída</label>
-                                    <input type="time" class="form-control" id="inputHoraEntrada" name="liberacao_hrSaida" value="<?php echo date("H:i") ?>" required>
+                                    <label for="inputHora" class="form-label">Hora</label>
+                                    <input type="time" class="form-control" id="inputHoraEntrada" name="liberacao_hr" value="<?php echo date("H:i") ?>" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="inputObservacoes" class="form-label">Descrição</label>
@@ -156,7 +167,7 @@ $totalPaginas = ceil($totalRegistros / $registrosPorPagina);
                                     <th class="text-center">Nº</th>
                                     <th class="text-center">Discente</th>
                                     <th class="text-center">Data e Hora Saída</th>
-                                    <!-- <th class="text-center">Coordenador Saída</th> -->
+                                    <th class="text-center">Data e Hora Entrada</th>
                                     <th class="text-center">Observação</th>
                                     <th class="text-center">Ações</th>
                                 </tr>
@@ -181,8 +192,25 @@ $totalPaginas = ceil($totalRegistros / $registrosPorPagina);
                                         }
                                         ?>
                                         <td class="text-center"><?php echo $nomeDiscente; ?></td>
-                                        <td class="text-center"><?php echo $liberacao['liberacao_dtSaida'] . '<br>' . $liberacao['liberacao_hrSaida']; ?></td>
-                                        <td class="text-center"><?php echo !empty($liberacao['liberacao_observacao']) ? $liberacao['liberacao_observacao'] : '-'; ?></td>
+                                        <td class="text-center">
+                                            <?php
+                                            if ($liberacao['liberacao_dtSaida'] && $liberacao['liberacao_hrSaida']) {
+                                                echo date('d/m/Y', strtotime($liberacao['liberacao_dtSaida'])) . '<br>' . date('H:i', strtotime($liberacao['liberacao_hrSaida']));
+                                            } else {
+                                                echo '-';
+                                            }
+                                            ?>
+                                        </td>
+                                        <td class="text-center">
+                                            <?php
+                                            if ($liberacao['liberacao_dtRetorno'] && $liberacao['liberacao_hrRetorno']) {
+                                                echo date('d/m/Y', strtotime($liberacao['liberacao_dtRetorno'])) . '<br>' . date('H:i', strtotime($liberacao['liberacao_hrRetorno']));
+                                            } else {
+                                                echo '-';
+                                            }
+                                            ?>
+                                        </td>
+                                        <td class="text-center"><?php echo !empty($liberacao['liberacao_observacao']) ? $liberacao['liberacao_observacao'] : '-'; ?></p></td>
                                         <td class="text-center">
                                             <a href="home.php?sisco=detalhesLiberacao&idLiberacao=<?php echo $liberacao['liberacao_id']; ?>" class="btn btn-primary">Detalhes</a>
                                         </td>

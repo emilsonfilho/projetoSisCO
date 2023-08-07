@@ -90,9 +90,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtUpdate->execute();
 
         if ($stmt->rowCount() > 0) {
-            echo "Liberação editada com sucesso.";
+            $msgType = urlencode("success");
+            $msg = urlencode("Liberação editada com sucesso.");
+            header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
         } else {
-            echo "Falha ao atuailizar a liberação.";
+            $msgType = urlencode("error");
+            $msg = urlencode("Falha ao atualizar a liberação.");
+            header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
         }
     } catch (PDOException $e) {
         echo "<strong>Error:</strong>" . $e->getMessage();

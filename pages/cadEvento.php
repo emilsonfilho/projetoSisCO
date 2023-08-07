@@ -86,11 +86,11 @@ try {
                                 </div>
                                 <div class="mb-3">
                                     <label for="inputData" class="form-label">Data</label>
-                                    <input type="date" class="form-control" id="inputData" name="evento_data" required>
+                                    <input type="date" class="form-control" id="inputData" name="evento_data" required value="<?php echo date("Y-m-d") ?>">
                                 </div>
                                 <div class="mb-3">
                                     <label for="inputHora" class="form-label">Hora</label>
-                                    <input type="time" class="form-control" id="inputHora" name="evento_hora" required>
+                                    <input type="time" class="form-control" id="inputHora" name="evento_hora" required value="<?php echo date("H:i") ?>">
                                 </div>
                             </div>
                             <div class="col-lg-6">

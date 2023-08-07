@@ -15,7 +15,7 @@ $discentesSelect = "SELECT tb_jmf_discente.*, tb_jmf_turma.turma_serie, tb_jmf_t
                     WHERE tb_jmf_turma.turma_ano >= " . (date("Y") - 2) . "
                     ORDER BY tb_jmf_discente.discente_nome ASC";
 
-$liberacaoSelect = "SELECT tb_sisco_liberacao.liberacao_dtSaida, tb_sisco_liberacao.liberacao_hrSaida, tb_sisco_liberacao.liberacao_observacao, tb_jmf_discente.discente_matricula
+$liberacaoSelect = "SELECT tb_sisco_liberacao.liberacao_dtRetorno, tb_sisco_liberacao.liberacao_hrRetorno, tb_sisco_liberacao.liberacao_dtSaida, tb_sisco_liberacao.liberacao_hrSaida, tb_sisco_liberacao.liberacao_observacao, tb_jmf_discente.discente_matricula
                     FROM tb_sisco_liberacao
                     JOIN tb_jmf_discente ON tb_sisco_liberacao.liberacao_idDiscente = tb_jmf_discente.discente_matricula
                     WHERE tb_sisco_liberacao.liberacao_id = :id";
@@ -82,11 +82,11 @@ try {
                         </div>
                         <div class="mb-3">
                             <label for="inputData" class="form-label">Data de Retorno</label>
-                            <input type="date" class="form-control" id="inputDataEntrada" name="liberacao_dtRetorno">
+                            <input type="date" class="form-control" id="inputDataEntrada" name="liberacao_dtRetorno" value="<?php echo $liberacao->liberacao_dtRetorno; ?>">
                         </div>
                         <div class="mb-3">
                             <label for="inputHora" class="form-label">Hora de Retorno</label>
-                            <input type="time" class="form-control" id="inputHoraEntrada" name="liberacao_hrRetorno">
+                            <input type="time" class="form-control" id="inputHoraEntrada" name="liberacao_hrRetorno" value="<?php echo $liberacao->liberacao_hrRetorno; ?>">
                         </div>
                         <div class="mb-3">
                             <label for="inputObservacoes" class="form-label">Descrição</label>
