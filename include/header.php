@@ -172,7 +172,7 @@ include_once("logout.php");
                 </g>
               </svg>
             </div>
-            <span class="nav-link-text ms-1">Sair do SAEP</span>
+            <span class="nav-link-text ms-1">Sair do SisCO</span>
           </a>
         </li>
       </ul>
@@ -198,7 +198,7 @@ include_once("logout.php");
             <li class="nav-item d-flex align-items-center">
               <a href="?sair" class="nav-link text-body font-weight-bold px-0" onclick="return confirm('Deseja sair do sistema de seleção de novos alunos?')">
                 <i class="fa fa-user me-sm-1"></i>
-                <span class="d-sm-inline d-none">Sair do SAEP</span>
+                <span class="d-sm-inline d-none">Sair do SisCO</span>
               </a>
             </li>
             <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
