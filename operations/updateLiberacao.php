@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $liberacao_hrSaida = $_POST['liberacao_hrSaida'];
     $liberacao_dtRetorno = $_POST['liberacao_dtRetorno'] !== '' ? $_POST['liberacao_dtRetorno'] : null;
     $liberacao_hrRetorno = $_POST['liberacao_hrRetorno'] !== '' ? $_POST['liberacao_hrRetorno'] : null;
-    
+
 
     if ($liberacao_dtRetorno != null && $liberacao_hrRetorno != null) {
         $liberacao_idColaboradorRetorno = $idColaboradorUpdate;
@@ -71,7 +71,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtSelect->bindValue(':idLiberacao', $liberacao_id);
         $stmtSelect->execute();
         $idColaboradorSaida = $stmtSelect->fetch(PDO::FETCH_OBJ);
-        
+
         $update = "UPDATE tb_sisco_liberacao SET liberacao_idDiscente = :idDiscente, liberacao_idResponsavel = :idResponsavelLegal, liberacao_dtSaida = :dtSaida, liberacao_hrSaida = :hrSaida, liberacao_idColaboradorSaida = :idColaboradorSaida, liberacao_dtRetorno = :dtRetorno, liberacao_hrRetorno = :hrRetorno, liberacao_idColaboradorRetorno = :idColaboradorRetorno, liberacao_observacao = :observacao, liberacao_dateTime = :dataTime WHERE liberacao_id = :id";
 
         $stmtUpdate = $conexao->prepare($update);

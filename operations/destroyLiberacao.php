@@ -18,7 +18,7 @@ try {
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result) {
-        $discenteId = $result['discente_matricula'];    
+        $discenteId = $result['discente_matricula'];
         $deleteLiberacao = "DELETE FROM tb_sisco_liberacao WHERE liberacao_id = :id";
 
         try {

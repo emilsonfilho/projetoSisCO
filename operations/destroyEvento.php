@@ -19,7 +19,7 @@ try {
 
     if ($result) {
         $discenteId = $result['discente_matricula'];
-        
+
         $deleteEvento = "DELETE FROM tb_sisco_evento WHERE evento_id = :id";
 
         try {
@@ -45,7 +45,6 @@ try {
         $msgType = urlencode("error");
         $msg = urlencode("Matrícula do discente não encontrada.");
         header("Location: ../pages/home.php?sisco=cadOcorrencia$discenteId&msgType=$msgType&msg=$msg");
-
     }
 } catch (PDOException $e) {
     echo $e->getMessage();

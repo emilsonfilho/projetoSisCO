@@ -21,7 +21,7 @@ if (isset($_GET['idTurma'])) {
       $serieTurma = $turma['turma_serie'];
       $cursoNome = $turma['curso_nome'];
 
-    $alunosQuery = "SELECT tb_jmf_discente.discente_nome, tb_jmf_discente.discente_matricula,
+      $alunosQuery = "SELECT tb_jmf_discente.discente_nome, tb_jmf_discente.discente_matricula,
     (SELECT COUNT(*) FROM tb_sisco_ocorrencia WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = tb_jmf_discente.discente_matricula) AS total_ocorrencias,
     (SELECT COUNT(*) FROM tb_sisco_evento WHERE tb_sisco_evento.evento_idDiscente = tb_jmf_discente.discente_matricula) AS total_eventos
     FROM tb_jmf_discente

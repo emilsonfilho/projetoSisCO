@@ -14,11 +14,8 @@
               </thead>
               <tbody>
                 <?php
-                  include_once('../config/conexao.php');
-              //   $turmasSelect = "SELECT tb_jmf_turma.turma_id, tb_jmf_turma.turma_serie, tb_jmf_curso.curso_nome
-              //     FROM tb_jmf_turma
-              //     JOIN tb_jmf_curso ON tb_jmf_turma.turma_idCurso = tb_jmf_curso.curso_id";
-              $turmasSelect = "SELECT tb_jmf_turma.turma_id, tb_jmf_turma.turma_serie, tb_jmf_curso.curso_nome
+                include_once('../config/conexao.php');
+                $turmasSelect = "SELECT tb_jmf_turma.turma_id, tb_jmf_turma.turma_serie, tb_jmf_curso.curso_nome
                    FROM tb_jmf_turma
                    JOIN tb_jmf_curso ON tb_jmf_turma.turma_idCurso = tb_jmf_curso.curso_id
                    ORDER BY tb_jmf_turma.turma_serie ASC, tb_jmf_curso.curso_nome ASC";

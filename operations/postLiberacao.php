@@ -106,8 +106,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     } catch (PDOException $e) {
         echo "<strong>Error:</strong> " . $e->getMessage();
-    //     $msgType = urlencode("error");
-    // $msg = urlencode("Ocorreu algum erro ao tentar registrar a liberção.");
-    // header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
     }
 }

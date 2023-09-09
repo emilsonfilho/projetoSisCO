@@ -19,7 +19,7 @@ try {
 
     if ($result) {
         $discenteId = $result['discente_matricula'];
-        
+
         $deleteOcorrencia = "DELETE FROM tb_sisco_ocorrencia WHERE ocorrencia_id = :id";
 
         try {

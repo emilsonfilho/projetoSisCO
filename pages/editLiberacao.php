@@ -57,7 +57,7 @@ try {
                             <datalist id="discentes">
                                 <?php foreach ($discentes as $discente) : ?>
                                     <option value="<?php echo $discente->discente_nome; ?>">
-                                <?php endforeach; ?>
+                                    <?php endforeach; ?>
                             </datalist>
                         </div>
                         <div class="mb-3">

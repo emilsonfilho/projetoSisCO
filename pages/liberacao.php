@@ -210,7 +210,8 @@ $totalPaginas = ceil($totalRegistros / $registrosPorPagina);
                                             }
                                             ?>
                                         </td>
-                                        <td class="text-center"><?php echo !empty($liberacao['liberacao_observacao']) ? $liberacao['liberacao_observacao'] : '-'; ?></p></td>
+                                        <td class="text-center"><?php echo !empty($liberacao['liberacao_observacao']) ? $liberacao['liberacao_observacao'] : '-'; ?></p>
+                                        </td>
                                         <td class="text-center">
                                             <a href="home.php?sisco=detalhesLiberacao&idLiberacao=<?php echo $liberacao['liberacao_id']; ?>" class="btn btn-primary">Detalhes</a>
                                         </td>
