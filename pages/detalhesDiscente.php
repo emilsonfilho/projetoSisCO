@@ -173,11 +173,21 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                     ?>
                                                         <td class="text-center">
                                                             <a href="home.php?sisco=editOcorrencia&idOcorrencia=<?php echo $ocorrencia['id']; ?>" class="btn btn-primary">Editar</a>
+                                                            <form action="../operations/destroyOcorrencia.php" method="post" style="display: inline;" id="formDestroyOcorrencia">
+                                                                <input type="hidden" name="idOcorrencia" value="<?php echo $ocorrencia['id']; ?>">
+                                                                <button type="button" class="btn btn-danger" onclick="confirmarRemocao()">Remover</button>
+                                                            </form>
+                                                            <script>
+                                                                function confirmarRemocao() {
+                                                                    if (confirm("Tem certeza de que deseja remover essa ocorrência?")) {
+                                                                        document.querySelector("#formDestroyOcorrencia").submit();
+                                                                    }
+                                                                }
+                                                            </script>
                                                         </td>
                                                     <?php
                                                     }
                                                     ?>
-
                                                 </tr>
                                             <?php } ?>
                                         </tbody>
