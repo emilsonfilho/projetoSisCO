@@ -27,6 +27,7 @@ if (isset($_GET['idLiberacao'])) {
 }
 ?>
 
+<script src="../operations/confirmDelete.js"></script>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -70,10 +71,3 @@ if (isset($_GET['idLiberacao'])) {
         </div>
     </div>
 </div>
-<script>
-    function confirmarRemocao(tipo, idForm) {
-        if (confirm(`Tem certeza que deseja remover ${tipo}?`)) {
-            document.querySelector(idForm).submit();
-        }
-    }
-</script>

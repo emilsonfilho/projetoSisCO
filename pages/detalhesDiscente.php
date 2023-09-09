@@ -72,6 +72,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
         }
 
 ?>
+        <script src="../operations/confirmDelete.js"></script>
 
         <div class="container">
             <?php
@@ -251,7 +252,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                         </tbody>
                                     <?php
                                     } else {
-                                        ?>
+                                    ?>
                                         <p>O aluno não possui eventos.</p>
                                     <?php
                                     }
@@ -272,10 +273,3 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
     echo "Matrícula do aluno não encontrada.";
 }
 ?>
-        <script>
-            function confirmarRemocao(tipo, idForm) {
-                if (confirm(`Tem certeza que deseja remover ${tipo}?`)) {
-                    document.querySelector(idForm).submit();
-                }
-            }
-        </script>
