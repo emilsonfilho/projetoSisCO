@@ -175,15 +175,8 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                             <a href="home.php?sisco=editOcorrencia&idOcorrencia=<?php echo $ocorrencia['id']; ?>" class="btn btn-primary">Editar</a>
                                                             <form action="../operations/destroyOcorrencia.php" method="post" style="display: inline;" id="formDestroyOcorrencia">
                                                                 <input type="hidden" name="idOcorrencia" value="<?php echo $ocorrencia['id']; ?>">
-                                                                <button type="button" class="btn btn-danger" onclick="confirmarRemocao()">Remover</button>
+                                                                <button type="button" class="btn btn-danger" onclick="confirmarRemocao('essa ocorrência', '#formDestroyOcorrencia')">Remover</button>
                                                             </form>
-                                                            <script>
-                                                                function confirmarRemocao() {
-                                                                    if (confirm("Tem certeza de que deseja remover essa ocorrência?")) {
-                                                                        document.querySelector("#formDestroyOcorrencia").submit();
-                                                                    }
-                                                                }
-                                                            </script>
                                                         </td>
                                                     <?php
                                                     }
@@ -244,7 +237,11 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                         // Exibe o botão de edição somente se o nível for 3
                                                     ?>
                                                         <td class="text-center">
-                                                            <a href="home.php?sisco=editEvento&idEvento=<?php echo $ocorrencia['id']; ?>" class="btn btn-primary">Editar</a>
+                                                            <a href="home.php?sisco=editEvento&idEvento=<?php echo $evento['id']; ?>" class="btn btn-primary">Editar</a>
+                                                            <form action="../operations/destroyEvento.php" method="post" style="display: inline;" id="formDestroyEvento">
+                                                                <input type="hidden" name="idEvento" value="<?php echo $evento['id']; ?>">
+                                                                <button type="button" class="btn btn-danger" onclick="confirmarRemocao('esse evento', '#formDestroyEvento')">Remover</button>
+                                                            </form>
                                                         </td>
                                                     <?php
                                                     }
@@ -254,7 +251,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                         </tbody>
                                     <?php
                                     } else {
-                                    ?>
+                                        ?>
                                         <p>O aluno não possui eventos.</p>
                                     <?php
                                     }
@@ -275,3 +272,10 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
     echo "Matrícula do aluno não encontrada.";
 }
 ?>
+        <script>
+            function confirmarRemocao(tipo, idForm) {
+                if (confirm(`Tem certeza que deseja remover ${tipo}?`)) {
+                    document.querySelector(idForm).submit();
+                }
+            }
+        </script>
