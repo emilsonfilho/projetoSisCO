@@ -49,5 +49,7 @@ if (isset($_GET['sisco'])) {
       echo "ID da liberação não encontrado.";
     }
   }
+} else {
+  header("Location: home.php?sisco=cadOcorrencia");
 }
 include_once("../include/footer.php");
