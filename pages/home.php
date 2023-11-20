@@ -48,6 +48,8 @@ if (isset($_GET['sisco'])) {
     } else {
       echo "ID da liberação não encontrado.";
     }
+  } elseif ($acao == 'gerenciarMotivos') {
+    
   }
 } else {
   header("Location: home.php?sisco=cadOcorrencia");

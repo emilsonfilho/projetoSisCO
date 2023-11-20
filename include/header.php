@@ -102,6 +102,14 @@ include_once("logout.php");
               <span class="nav-link-text ms-1">Corpo Doscente</span>
             </a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="home.php?sisco=gerenciarMotivos">
+              <div class="icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                <img style="width: 100%" src="../assets/img/icones/lista.png" alt="">
+              </div>
+              <span class="nav-link-text ms-1">Gerenciar Motivos</span>
+            </a>
+          </li>
           <!-- Fim do nível Admin -->
         <?php
         } elseif ($_SESSION['nivel'] === 2 || $_SESSION['nivel'] === 1) {
