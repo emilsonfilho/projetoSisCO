@@ -71,6 +71,60 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
             $eventosFormatados[$index]['id'] = $evento['evento_id'];
         }
 
+//         $queryLiberacoes = "
+//     SELECT
+//         tb_jmf_discente.discente_nome,
+//         tb_jmf_colaborador.colaborador_nome,
+//         tb_jmf_responsavellegal.responsavelLegal_nome,
+//         GROUP_CONCAT(DISTINCT CONCAT(tb_sisco_liberacao.liberacao_dtSaida, ' ', tb_sisco_liberacao.liberacao_hrSaida) ORDER BY tb_sisco_liberacao.liberacao_dtSaida) AS datas_horarios_saida,
+//         GROUP_CONCAT(DISTINCT CONCAT(tb_sisco_liberacao.liberacao_dtRetorno, ' ', tb_sisco_liberacao.liberacao_hrRetorno) ORDER BY tb_sisco_liberacao.liberacao_dtRetorno) AS datas_horarios_retorno,
+//         tb_sisco_liberacao.liberacao_observacao
+//     FROM
+//         tb_sisco_liberacao
+//     JOIN tb_jmf_discente ON tb_sisco_liberacao.liberacao_idDiscente = tb_jmf_discente.discente_matricula
+//     JOIN tb_jmf_colaborador ON tb_sisco_liberacao.liberacao_idColaboradorSaida = tb_jmf_colaborador.colaborador_matricula
+//                            OR tb_sisco_liberacao.liberacao_idColaboradorRetorno = tb_jmf_colaborador.colaborador_matricula
+//     JOIN tb_jmf_responsavellegal ON tb_sisco_liberacao.liberacao_idResponsavel = tb_jmf_responsavellegal.responsavelLegal_id
+//     GROUP BY
+//         tb_jmf_discente.discente_nome,
+//         tb_jmf_colaborador.colaborador_nome,
+//         tb_jmf_responsavellegal.responsavelLegal_nome,
+//         tb_sisco_liberacao.liberacao_observacao;
+// ";
+
+$queryLiberacoes = "SELECT 
+                        tb_jmf_discente.discente_nome, 
+                        tb_sisco_liberacao.liberacao_dtSaida, 
+                        tb_sisco_liberacao.liberacao_hrSaida, 
+                        tb_sisco_liberacao.liberacao_dtRetorno, 
+                        tb_sisco_liberacao.liberacao_hrRetorno, 
+                        tb_sisco_liberacao.liberacao_observacao, 
+                        tb_jmf_responsavellegal.responsavelLegal_nome,
+                        colSaida.colaborador_nome AS colaborador_saida_nome,
+                        colRetorno.colaborador_nome AS colaborador_retorno_nome
+                    FROM 
+                       tb_sisco_liberacao
+                    JOIN 
+                       tb_jmf_discente ON tb_sisco_liberacao.liberacao_idDiscente = tb_jmf_discente.discente_matricula
+                    JOIN 
+                       tb_jmf_colaborador colSaida ON tb_sisco_liberacao.liberacao_idColaboradorSaida = colSaida.colaborador_matricula
+                    JOIN 
+                       tb_jmf_colaborador colRetorno ON tb_sisco_liberacao.liberacao_idColaboradorRetorno = colRetorno.colaborador_matricula
+                    JOIN
+                        tb_jmf_responsavellegal ON tb_sisco_liberacao.liberacao_idResponsavel = tb_jmf_responsavellegal.responsavelLegal_id
+                    WHERE 
+                       tb_jmf_discente.discente_matricula = '2340707';
+
+";
+
+$stmtLiberacoes = $conexao->prepare($queryLiberacoes);
+$stmtLiberacoes->execute();
+$liberacoes = $stmtLiberacoes->fetchAll(PDO::FETCH_ASSOC);
+var_dump($liberacoes);
+
+
+    
+
 ?>
         <script src="../operations/confirmDelete.js"></script>
 
@@ -207,6 +261,72 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                             <div class="table-responsive">
                                 <table class="table">
                                     <?php
+                                    if (!empty($evento)) {
+                                    ?>
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">nº</th>
+                                                <th class="text-center">Motivo</th>
+                                                <th class="text-center">Observação</th>
+                                                <th class="text-center">Data e Hora</th>
+                                                <th class="text-center">Coordenador Responsável</th>
+                                                <?php
+                                                if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 3) {
+                                                    // Exibe o botão de edição somente se o nível for 3
+                                                ?>
+                                                    <th class="text-center">Ações</th>
+                                                <?php
+                                                }
+                                                ?>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($eventosFormatados as $evento) { ?>
+                                                <tr>
+                                                    <td class="text-center"><?php echo $evento['numero']; ?></td>
+                                                    <td class="text-center"><?php echo $evento['motivo']; ?></td>
+                                                    <td class="text-center"><?php echo $evento['observacao']; ?></td>
+                                                    <td class="text-center"><?php echo $evento['data_hora']; ?></td>
+                                                    <td class="text-center"><?php echo $evento['responsavel']; ?></td>
+                                                    <?php
+                                                    if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 3) {
+                                                        // Exibe o botão de edição somente se o nível for 3
+                                                    ?>
+                                                        <td class="text-center">
+                                                            <a href="home.php?sisco=editEvento&idEvento=<?php echo $evento['id']; ?>" class="btn btn-primary">Editar</a>
+                                                            <form action="../operations/destroyEvento.php" method="post" style="display: inline;" id="formDestroyEvento">
+                                                                <input type="hidden" name="idEvento" value="<?php echo $evento['id']; ?>">
+                                                                <button type="button" class="btn btn-danger" onclick="confirmarRemocao('esse evento', '#formDestroyEvento')">Remover</button>
+                                                            </form>
+                                                        </td>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <p>O aluno não possui eventos.</p>
+                                    <?php
+                                    }
+                                    ?>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card shadow-sm rounded">
+                        <div class="card-body">
+                            <h6>Liberações do Aluno</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <?php
+                                    // primeiro passo: query liberacoes
                                     if (!empty($evento)) {
                                     ?>
                                         <thead>
