@@ -97,6 +97,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
             ?>
             <div class="row">
                 <div class="col-md-12">
+                    <a href="javascript:history.back()" class="btn btn-primary">Voltar</a>
                     <div class="card shadow-sm rounded">
                         <div class="card-body">
                             <h3 class="text-center"><?php echo $aluno['discente_nome']; ?></h3>

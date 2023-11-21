@@ -56,7 +56,11 @@ if (isset($_GET['idTurma'])) {
     <div class="col-md-12">
       <div class="card shadow-sm rounded">
         <div class="card-body">
-          <h5 class="card-title">Exibindo relatório de <?php echo $serieTurma; ?> - <?php echo $cursoNome; ?></h5>
+          <div class="card-title d-flex justify-content-between align-items-center">
+            <h5>Exibindo relatório de <?php echo $serieTurma; ?> - <?php echo $cursoNome; ?></h5>
+            <a href="javascript:history.back()" class="btn btn-primary d-inline">Voltar</a>
+          </div>
+          <!-- <h5 class="card-title">Exibindo relatório de <?php echo $serieTurma; ?> - <?php echo $cursoNome; ?></h5> -->
           <div class="table-responsive">
             <table class="table">
               <thead>
