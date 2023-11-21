@@ -23,7 +23,8 @@ if (isset($_GET['idTurma'])) {
 
       $alunosQuery = "SELECT tb_jmf_discente.discente_nome, tb_jmf_discente.discente_matricula,
     (SELECT COUNT(*) FROM tb_sisco_ocorrencia WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = tb_jmf_discente.discente_matricula) AS total_ocorrencias,
-    (SELECT COUNT(*) FROM tb_sisco_evento WHERE tb_sisco_evento.evento_idDiscente = tb_jmf_discente.discente_matricula) AS total_eventos
+    (SELECT COUNT(*) FROM tb_sisco_evento WHERE tb_sisco_evento.evento_idDiscente = tb_jmf_discente.discente_matricula) AS total_eventos,
+    (SELECT COUNT(*) FROM tb_sisco_liberacao WHERE tb_sisco_liberacao.liberacao_idDiscente = tb_jmf_discente.discente_matricula) AS total_liberacoes
     FROM tb_jmf_discente
     WHERE tb_jmf_discente.discente_idTurma = :idTurma
     ORDER BY tb_jmf_discente.discente_nome ASC";
@@ -37,10 +38,12 @@ if (isset($_GET['idTurma'])) {
       $totalAlunos = count($alunos);
       $totalOcorrenciasTurma = 0;
       $totalEventosTurma = 0;
+      $totalLiberacoesTurma = 0;
 
       foreach ($alunos as $aluno) {
         $totalOcorrenciasTurma += $aluno['total_ocorrencias'];
         $totalEventosTurma += $aluno['total_eventos'];
+        $totalLiberacoesTurma += $aluno['total_liberacoes'];
       }
     }
   } catch (PDOException $e) {
@@ -69,6 +72,7 @@ if (isset($_GET['idTurma'])) {
                   <th class="text-center">Nº Matrícula</th>
                   <th class="text-center">Qntd. Ocorrências</th>
                   <th class="text-center">Qntd. Eventos</th>
+                  <th class="text-center">Qntd. Liberações</th>
                   <th class="text-center">Consulta</th>
                 </tr>
               </thead>
@@ -79,6 +83,7 @@ if (isset($_GET['idTurma'])) {
                     <td class="text-center"><?php echo $aluno['discente_matricula']; ?></td>
                     <td class="text-center"><?php echo $aluno['total_ocorrencias']; ?></td>
                     <td class="text-center"><?php echo $aluno['total_eventos']; ?></td>
+                    <td class="text-center"><?php echo $aluno['total_liberacoes']; ?></td>
                     <td class="text-center">
                       <a href="home.php?sisco=detalhesDiscente&matricula=<?php echo $aluno['discente_matricula']; ?>" class="btn btn-info btn-sm">Detalhes</a>
                     </td>
@@ -90,6 +95,7 @@ if (isset($_GET['idTurma'])) {
           <p class="text-muted">Quantidade total de alunos: <?php echo $totalAlunos; ?></p>
           <p class="text-muted">Quantidade total de ocorrências: <?php echo $totalOcorrenciasTurma; ?></p>
           <p class="text-muted">Quantidade total de eventos: <?php echo $totalEventosTurma; ?></p>
+          <p class="text-muted">Quantidade total de liberações: <?php echo $totalLiberacoesTurma; ?></p>
         </div>
       </div>
     </div>
