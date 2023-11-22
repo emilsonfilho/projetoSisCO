@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../config/conexao.php');
+require_once('../utils/agora.php');
 
 if (!isset($_SESSION['loginuser'])) {
     echo "Sessão inválida";
@@ -74,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ocorrencia_data = $_POST['ocorrencia_data'];
     $ocorrencia_hora = $_POST['ocorrencia_hora'];
     $ocorrencia_descricao = $_POST['ocorrencia_descricao'];
-    $ocorrencia_dataTime = date('Y-m-d H:i:s');
+    $ocorrencia_dataTime = agora();
 
     try {
         $update = "UPDATE tb_sisco_ocorrencia SET ocorrencia_idDiscente = :idDiscente, ocorrencia_idColaborador = :idColaborador, ocorrencia_idResponsavelLegal = :idResponsavelLegal, ocorrencia_idCategoria = :idCategoria, ocorrencia_idMotivo = :idMotivo, ocorrencia_data = :data, ocorrencia_hora = :hora, ocorrencia_descricao = :descricao, ocorrencia_dataTime = :dataTime WHERE ocorrencia_id = :id";

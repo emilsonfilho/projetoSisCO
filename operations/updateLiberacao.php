@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../config/conexao.php');
+require_once('../utils/agora.php');
 
 if (!isset($_SESSION['loginuser'])) {
     echo "Sessão inválida";
@@ -62,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $liberacao_observacao = $_POST['liberacao_observacao'];
-    $liberacao_dataTime = date('Y-m-d H:i:s');
+    $liberacao_dataTime = agora();
 
     try {
         $selectIdColaboradorSaida = "SELECT liberacao_idColaboradorSaida FROM tb_sisco_liberacao WHERE liberacao_id = :idLiberacao";

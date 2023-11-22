@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../config/conexao.php');
+require_once('../utils/agora.php');
 
 if (!isset($_SESSION['loginuser'])) {
     echo "Sessão inválida";
@@ -87,7 +88,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ocorrencia_data = $_POST['ocorrencia_data'];
     $ocorrencia_hora = $_POST['ocorrencia_hora'];
     $ocorrencia_descricao = $_POST['ocorrencia_descricao'];
-    $ocorrencia_dataTime = date('Y-m-d H:i:s');
+    $ocorrencia_dataTime = agora();
 
     try {
         // Preparar a consulta SQL para inserir os dados na tabela de ocorrências
