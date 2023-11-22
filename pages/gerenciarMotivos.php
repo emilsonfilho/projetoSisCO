@@ -1,23 +1,44 @@
 <?php
-    include_once('../config/conexao.php');
+include_once('../config/conexao.php');
 ?>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-df5m027ofAKlfJ6rRhWBoNmXPTcIlDJFvL+OdSghjZtMiPMRZL7R02GqcfwbSzWl" crossorigin="anonymous">
 
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card shadow-sm rounded">
-            <div class="card-body">
-                <h5 class="card-title">Gerenciar Motivos de Ocorrências</h5>
-                <div class="table-responsive">
-                    <table class="col-md-12 table">
-                        <thead>
-                            <tr>
-                                <th>Motivos Ocorrência</th>
-                                <th class="text-center">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php
+<div class="container">
+    <?php
+    if (isset($_GET['msgType']) && isset($_GET['msg'])) {
+        $msgType = $_GET['msgType'];
+        $msg = $_GET['msg'];
+
+        // Verificar o tipo de mensagem e exibir a mensagem correspondente
+        if ($msgType === 'success') {
+            echo '<div id="alert-container" class="alert alert-success alert-dismissible fade show" role="alert">';
+            echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+            echo urldecode($msg);
+            echo '</div>';
+        } elseif ($msgType === 'error') {
+            echo '<div id="alert-container" class="alert alert-danger alert-dismissible fade show" role="alert">';
+            echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
+            echo urldecode($msg);
+            echo '</div>';
+        }
+    }
+    ?>
+    <script src="../operations/confirmDelete.js"></script>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm rounded">
+                <div class="card-body">
+                    <h5 class="card-title">Gerenciar Motivos de Ocorrências</h5>
+                    <div class="table-responsive">
+                        <table class="col-md-12 table">
+                            <thead>
+                                <tr>
+                                    <th>Motivos Ocorrência</th>
+                                    <th class="text-center">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php
                                 $ocMotivosQuery = "SELECT ocorrenciaMotivo_id, ocorrenciaMotivo_nome FROM tb_sisco_ocorrenciamotivo";
 
                                 try {
@@ -28,34 +49,41 @@
                                     foreach ($ocMotivos as $ocMotivo) {
                                         $ocMotivoNome = $ocMotivo['ocorrenciaMotivo_nome'];
                                         $ocMotivoId = $ocMotivo['ocorrenciaMotivo_id'];
-                                        ?>
-                                            <tr>
-                                                <td><?php echo $ocMotivoNome ?></td>
-                                                <td><a href="home.php?sisco=editOcorrenciaMotivo&idOcorrenciaMotivo=<?php echo $ocMotivoId ?>" class="btn btn-primary"><i class="fas fa-edit"></i></a> <a href="" class="btn btn-danger"><i class="fas fa-trash"></i></a></td>
-                                            </tr>
-                                        <?php
+                                ?>
+                                        <tr>
+                                            <td><?php echo $ocMotivoNome ?></td>
+                                            <td>
+                                                <a href="home.php?sisco=editOcorrenciaMotivo&idOcorrenciaMotivo=<?php echo $ocMotivoId ?>" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                                <form action="../operations/verifyOcorrenciaMotivo.php" method="post" id="formDestroyOcorrenciaMotivo" style="display: inline;">
+                                                    <input type="hidden" name="idOcorrenciaMotivo" value="<?php echo $ocMotivoId; ?>">
+                                                    <button class="btn btn-danger" type="button" onclick="confirmarRemocao('esse motivo de ocorrência', '#formDestroyOcorrenciaMotivo')"><i class="fas fa-trash"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                <?php
                                     }
                                 } catch (PDOException $e) {
                                     echo "<b>Erro: </b>" . $e->getMessage();
                                 }
-                            ?>
-                        </tbody>
-                    </table>
+                                ?>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-5">
-        <div class="card shadow-sm rounded">
-            <div class="card-body">
-                <h5 class="card-title">Gerenciar Motivos de Eventos</h5>
-                <div class="table-responsive">
-                    <table class="col-md-12">
-                        <thead>
-                            <th>Motivos Eventos</th>
-                            <th>Ações</th>
-                        </thead>
-                    </table>
+        <div class="col-md-5">
+            <div class="card shadow-sm rounded">
+                <div class="card-body">
+                    <h5 class="card-title">Gerenciar Motivos de Eventos</h5>
+                    <div class="table-responsive">
+                        <table class="col-md-12">
+                            <thead>
+                                <th>Motivos Eventos</th>
+                                <th>Ações</th>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
