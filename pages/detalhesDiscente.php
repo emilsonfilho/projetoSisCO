@@ -1,5 +1,6 @@
 <?php
 include_once("../config/conexao.php");
+require_once("../utils/formatarDataHora.php");
 
 // Verifica se a matrícula do aluno foi fornecida na URL
 if (isset($_GET['matricula'])) {
@@ -44,7 +45,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
             $ocorrenciasFormatadas[$index]['numero'] = $index + 1;
             $ocorrenciasFormatadas[$index]['motivo'] = $ocorrencia['ocorrenciaMotivo_nome'];
             $ocorrenciasFormatadas[$index]['descricao'] = !empty($ocorrencia['ocorrencia_descricao']) ? $ocorrencia['ocorrencia_descricao'] : '-';
-            $ocorrenciasFormatadas[$index]['data_hora'] = date('d/m/Y H:i', strtotime($ocorrencia['ocorrencia_data'] . ' ' . $ocorrencia['ocorrencia_hora']));
+            $ocorrenciasFormatadas[$index]['data_hora'] = formatarDataHora($ocorrencia['ocorrencia_data'], $ocorrencia['ocorrencia_hora']);
             $ocorrenciasFormatadas[$index]['responsavel'] = $ocorrencia['colaborador_nome'];
             $ocorrenciasFormatadas[$index]['id'] = $ocorrencia['ocorrencia_id'];
         }
@@ -71,6 +72,47 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
             $eventosFormatados[$index]['id'] = $evento['evento_id'];
         }
 
+        $queryLiberacoes = "SELECT 
+                        tb_jmf_discente.discente_nome, 
+                        tb_sisco_liberacao.liberacao_id,
+                        tb_sisco_liberacao.liberacao_dtSaida, 
+                        tb_sisco_liberacao.liberacao_hrSaida, 
+                        tb_sisco_liberacao.liberacao_dtRetorno, 
+                        tb_sisco_liberacao.liberacao_hrRetorno, 
+                        tb_sisco_liberacao.liberacao_observacao, 
+                        tb_jmf_responsavellegal.responsavelLegal_nome,
+                        colSaida.colaborador_nome AS colaborador_saida_nome,
+                        colRetorno.colaborador_nome AS colaborador_retorno_nome
+                    FROM 
+                       tb_sisco_liberacao
+                    JOIN 
+                       tb_jmf_discente ON tb_sisco_liberacao.liberacao_idDiscente = tb_jmf_discente.discente_matricula
+                    JOIN 
+                       tb_jmf_colaborador colSaida ON tb_sisco_liberacao.liberacao_idColaboradorSaida = colSaida.colaborador_matricula
+                    JOIN 
+                       tb_jmf_colaborador colRetorno ON tb_sisco_liberacao.liberacao_idColaboradorRetorno = colRetorno.colaborador_matricula
+                    JOIN
+                        tb_jmf_responsavellegal ON tb_sisco_liberacao.liberacao_idResponsavel = tb_jmf_responsavellegal.responsavelLegal_id
+                    WHERE 
+                       tb_jmf_discente.discente_matricula = :matricula;
+
+";
+
+        $stmtLiberacoes = $conexao->prepare($queryLiberacoes);
+        $stmtLiberacoes->bindParam(':matricula', $matricula);
+        $stmtLiberacoes->execute();
+        $liberacoes = $stmtLiberacoes->fetchAll(PDO::FETCH_ASSOC);
+
+        $liberacoesFormatadas = array();
+        foreach ($liberacoes as $index => $liberacao) {
+            $liberacoesFormatadas[$index]['numero'] = $index + 1;
+            $liberacoesFormatadas[$index]['dt_hr_saida'] = formatarDataHora($liberacao['liberacao_dtSaida'], $liberacao['liberacao_hrSaida']);
+            $liberacoesFormatadas[$index]['colaborador_saida'] = $liberacao['colaborador_saida_nome'] ?? "-";
+            $liberacoesFormatadas[$index]['dt_hr_retorno'] = ($liberacao['liberacao_dtRetorno'] || $liberacao['liberacao_hrRetorno']) ? formatarDataHora($liberacao['liberacao_dtRetorno'], $liberacao['liberacao_hrRetorno']) : "-";
+            $liberacoesFormatadas[$index]['colaborador_retorno'] = $liberacao['colaborador_retorno_nome'] ?? "-";
+            $liberacoesFormatadas[$index]['observacao'] = $liberacao['liberacao_observacao'] ?? "-";
+            $liberacoesFormatadas[$index]['id'] = $liberacao['liberacao_id'];
+        }
 ?>
         <script src="../operations/confirmDelete.js"></script>
 
@@ -243,6 +285,74 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                             <form action="../operations/destroyEvento.php" method="post" style="display: inline;" id="formDestroyEvento">
                                                                 <input type="hidden" name="idEvento" value="<?php echo $evento['id']; ?>">
                                                                 <button type="button" class="btn btn-danger" onclick="confirmarRemocao('esse evento', '#formDestroyEvento')">Remover</button>
+                                                            </form>
+                                                        </td>
+                                                    <?php
+                                                    }
+                                                    ?>
+                                                </tr>
+                                            <?php } ?>
+                                        </tbody>
+                                    <?php
+                                    } else {
+                                    ?>
+                                        <p>O aluno não possui eventos.</p>
+                                    <?php
+                                    }
+                                    ?>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <div class="card shadow-sm rounded">
+                        <div class="card-body">
+                            <h6>Liberações do Aluno</h6>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <?php
+                                    // primeiro passo: query liberacoes
+                                    if (!empty($liberacoes)) {
+                                    ?>
+                                        <thead>
+                                            <tr class="align-middle">
+                                                <th class="text-center">nº</th>
+                                                <th class="text-center">Data e Hora Saída</th>
+                                                <th class="text-center">Coordenador Responsável<br>Saída</th>
+                                                <th class="text-center">Data e Hora Retorno</th>
+                                                <th class="text-center">Coordenador Responsável<br>Retorno</th>
+                                                <th class="text-center">Observação</th>
+                                                <?php
+                                                if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 3) {
+                                                    // Exibe o botão de edição somente se o nível for 3
+                                                ?>
+                                                    <th class="text-center">Ações</th>
+                                                <?php
+                                                }
+                                                ?>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php foreach ($liberacoesFormatadas as $liberacao) { ?>
+                                                <tr>
+                                                    <td class="text-center"><?php echo $liberacao['numero']; ?></td>
+                                                    <td class="text-center"><?php echo $liberacao['dt_hr_saida']; ?></td>
+                                                    <td class="text-center"><?php echo $liberacao['colaborador_saida']; ?></td>
+                                                    <td class="text-center"><?php echo $liberacao['dt_hr_retorno']; ?></td>
+                                                    <td class="text-center"><?php echo $liberacao['colaborador_retorno']; ?></td>
+                                                    <td class="text-center"><?php echo $liberacao['observacao']; ?></td>
+                                                    <?php
+                                                    if (isset($_SESSION['nivel']) && $_SESSION['nivel'] == 3) {
+                                                        // Exibe o botão de edição somente se o nível for 3
+                                                    ?>
+                                                        <td class="text-center">
+                                                            <a href="home.php?sisco=editLiberacao&idLiberacao=<?php echo $liberacao['id']; ?>" class="btn btn-primary">Editar</a>
+                                                            <form action="../operations/destroyLiberacao.php" method="post" style="display: inline;" id="formDestroyLiberacao">
+                                                                <input type="hidden" name="idEvento" value="<?php echo $liberacao['id']; ?>">
+                                                                <button type="button" class="btn btn-danger" onclick="confirmarRemocao('esse evento', '#formDestroyLiberacao')">Remover</button>
                                                             </form>
                                                         </td>
                                                     <?php
