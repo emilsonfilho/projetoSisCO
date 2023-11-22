@@ -36,11 +36,11 @@ try {
                         </div>
                         <div class="mb-3">
                             <label for="descricao">Descrição do motivo</label>
-                            <textarea name="ocorrenciaMotivo_descricao" id="descricao" class="form-control"><?php echo $motivo['ocorrenciaMotivo_descricao'] ?></textarea>
+                            <textarea name="ocorrenciaMotivo_descricao" id="descricao" class="form-control" required><?php echo $motivo['ocorrenciaMotivo_descricao'] ?></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="categoria">Categoria do motivo</label>
-                            <select name="ocorrenciaMotivo_idCategoria" id="categoria" class="form-select">
+                            <select name="ocorrenciaMotivo_idCategoria" id="categoria" class="form-select" required>
                                 <?php
                                 foreach ($categorias as $categoria) {
                                 ?>
