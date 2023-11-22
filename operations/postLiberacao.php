@@ -1,6 +1,7 @@
 <?php
 session_start();
 include('../config/conexao.php');
+require_once('../utils/agora.php');
 
 if (!isset($_SESSION['loginuser'])) {
     echo "Sessão inválida";
@@ -59,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     $liberacao_tipo = $_POST['tipoLiberacao'];
-    $liberacao_dateTime = date('Y-m-d H:i:s');
+    $liberacao_dateTime = agora();
 
     $liberacao_data = $_POST['liberacao_dt'];
     $liberacao_hora = $_POST['liberacao_hr'];
