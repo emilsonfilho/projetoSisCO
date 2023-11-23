@@ -49,7 +49,10 @@ try {
         <div class="col-md-6">
             <div class="card shadow-sm rounded">
                 <div class="card-body">
-                    <h5 class="card-title">Edição de Liberação</h5>
+                <div class="card-title d-flex justify-content-between align-items-center">
+                        <h5>Edição de Liberação</h5>
+                        <a href="javascript:history.back();" class="btn btn-secondary">Voltar</a>
+                    </div>
                     <form method="POST" action="../operations/updateLiberacao.php?idLiberacao=<?php echo $_GET['idLiberacao']; ?>">
                         <div class="mb-3">
                             <label for="inputNome" class="form-label">Nome</label>
