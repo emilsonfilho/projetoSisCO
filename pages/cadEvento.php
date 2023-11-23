@@ -90,6 +90,9 @@ try {
                                 </div>
                                 <div class="mb-3">
                                     <label for="inputHora" class="form-label">Hora</label>
+                                    <?php
+                                    date_default_timezone_set('America/Fortaleza');
+                                    ?>
                                     <input type="time" class="form-control" id="inputHora" name="evento_hora" required value="<?php echo date("H:i") ?>">
                                 </div>
                             </div>
