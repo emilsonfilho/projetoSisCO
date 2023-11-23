@@ -56,7 +56,13 @@ if (isset($_GET['sisco'])) {
     } else {
       echo "ID do motivo da ocorrência não encontrado.";
     }
-  } 
+  } elseif ($acao == 'editEventoMotivo') {
+    if (isset($_GET['idEventoMotivo'])) {
+      include_once('editEventoMotivo.php');
+    } else {
+      echo "ID do motivo de evento não encontrado.";
+    }
+  }
 } else {
   header("Location: home.php?sisco=cadOcorrencia");
 }

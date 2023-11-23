@@ -77,11 +77,41 @@ include_once('../config/conexao.php');
                 <div class="card-body">
                     <h5 class="card-title">Gerenciar Motivos de Eventos</h5>
                     <div class="table-responsive">
-                        <table class="col-md-12">
+                        <table class="col-md-12 table">
                             <thead>
                                 <th>Motivos Eventos</th>
-                                <th>Ações</th>
+                                <th class="text-center">Ações</th>
                             </thead>
+                            <tbody>
+                                <?php
+                                $eventosMotivosQuery = "SELECT eventoMotivo_id, eventoMotivo_nome FROM tb_sisco_eventomotivo";
+
+                                try {
+                                    $stmtEventos = $conexao->prepare($eventosMotivosQuery);
+                                    $stmtEventos->execute();
+                                    $eventosMotivos = $stmtEventos->fetchAll(PDO::FETCH_ASSOC);
+
+                                    foreach ($eventosMotivos as $eventoMotivo) {
+                                        $eventoMotivoNome = $eventoMotivo['eventoMotivo_nome'];
+                                        $eventoMotivoId = $eventoMotivo['eventoMotivo_id'];
+                                ?>
+                                        <tr>
+                                            <td><?php echo $eventoMotivoNome; ?></td>
+                                            <td>
+                                                <a href="home.php?sisco=editEventoMotivo&idEventoMotivo=<?php echo $eventoMotivoId; ?>" class="btn btn-primary"><i class="fas fa-edit"></i></a>
+                                                <form action="../operations/verifyEventoMotivo.php" method="post" id="formDestroyEventoMotivo" style="display: inline;">
+                                                    <input type="hidden" name="idEventoMotivo" value="<?php echo $eventoMotivoId; ?>">
+                                                    <button class="btn btn-danger" type="button" onclick="confirmarRemocao('esse motivo de evento', '#formDestroyEventoMotivo')"><i class="fas fa-trash"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                <?php
+                                    }
+                                } catch (PDOException $e) {
+                                    echo "<b>Erro: </b>" . $e->getMessage();
+                                }
+                                ?>
+                            </tbody>
                         </table>
                     </div>
                 </div>
