@@ -48,6 +48,20 @@ if (isset($_GET['sisco'])) {
     } else {
       echo "ID da liberação não encontrado.";
     }
+  } elseif ($acao == 'gerenciarMotivos') {
+    include_once('gerenciarMotivos.php');
+  } elseif ($acao == 'editOcorrenciaMotivo') {
+    if (isset($_GET['idOcorrenciaMotivo'])) {
+      include_once('editOcorrenciaMotivo.php');
+    } else {
+      echo "ID do motivo da ocorrência não encontrado.";
+    }
+  } elseif ($acao == 'editEventoMotivo') {
+    if (isset($_GET['idEventoMotivo'])) {
+      include_once('editEventoMotivo.php');
+    } else {
+      echo "ID do motivo de evento não encontrado.";
+    }
   }
 } else {
   header("Location: home.php?sisco=cadOcorrencia");

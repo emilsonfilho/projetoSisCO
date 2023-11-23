@@ -90,7 +90,7 @@ try {
                         </div>
                         <div class="mb-3">
                             <label for="inputObservacoes" class="form-label">Descrição</label>
-                            <textarea class="form-control" id="inputObservacoes" name="liberacao_observacao" placeholder="Descreva a liberação." required><?php echo $liberacao->liberacao_observacao; ?></textarea>
+                            <textarea class="form-control" id="inputObservacoes" name="liberacao_observacao" placeholder="Descreva a liberação."><?php echo $liberacao->liberacao_observacao; ?></textarea>
                         </div>
                         <button type="submit" class="btn btn-primary">Enviar</button>
                     </form>
