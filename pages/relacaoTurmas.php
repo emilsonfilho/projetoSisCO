@@ -32,7 +32,7 @@
                     <tr>
                       <td><?php echo $turmaNome; ?></td>
                       <td class="text-center">
-                        <a href="<?php echo $urlRelatorio; ?>" class="btn btn-primary">Ver Relatório</a>
+                        <a href="<?php echo $urlRelatorio; ?>" class="btn btn-primary"><i class="fas fa-file-alt me-1"></i> Ver Relatório</a>
                       </td>
                     </tr>
                 <?php

@@ -139,7 +139,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
             ?>
             <div class="row">
                 <div class="col-md-12">
-                    <a href="javascript:history.back()" class="btn btn-primary">Voltar</a>
+                    <a href="javascript:history.back()" class="btn btn-primary"><i class="fas fa-arrow-left me-1"></i> Voltar</a>
                     <div class="card shadow-sm rounded">
                         <div class="card-body">
                             <h3 class="text-center"><?php echo $aluno['discente_nome']; ?></h3>
@@ -216,9 +216,9 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                         // Exibe o botão de edição somente se o nível for 3
                                                     ?>
                                                         <td class="text-center">
-                                                            <a href="home.php?sisco=editOcorrencia&idOcorrencia=<?php echo $ocorrencia['id']; ?>" class="btn btn-primary">Editar</a>
+                                                            <a href="home.php?sisco=editOcorrencia&idOcorrencia=<?php echo $ocorrencia['id']; ?>" class="btn btn-primary"><i class="fas fa-edit me-1"></i> Editar</a>
                                                             <form action="../operations/destroyOcorrencia.php" method="post" style="display: inline;" id="formDestroyOcorrencia">
-                                                                <button type="button" class="btn btn-danger" onclick="confirmAndSetId('formDestroyOcorrencia', 'idOcorrencia', <?php echo $ocorrencia['id']; ?>, 'essa ocorrência');">Remover</button>
+                                                                <button type="button" class="btn btn-danger" onclick="confirmAndSetId('formDestroyOcorrencia', 'idOcorrencia', <?php echo $ocorrencia['id']; ?>, 'essa ocorrência');"><i class="fas fa-trash me-1"></i> Remover</button>
                                                             </form>
                                                         </td>
                                                     <?php
@@ -280,9 +280,9 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                         // Exibe o botão de edição somente se o nível for 3
                                                     ?>
                                                         <td class="text-center">
-                                                            <a href="home.php?sisco=editEvento&idEvento=<?php echo $evento['id']; ?>" class="btn btn-primary">Editar</a>
+                                                            <a href="home.php?sisco=editEvento&idEvento=<?php echo $evento['id']; ?>" class="btn btn-primary"><i class="fas fa-edit me-1"></i> Editar</a>
                                                             <form action="../operations/destroyEvento.php" method="post" style="display: inline;" id="formDestroyEvento">
-                                                                <button type="button" class="btn btn-danger" onclick="confirmAndSetId('formDestroyEvento', 'idEvento', <?php echo $evento['id']; ?>, 'esse evento');confirmarRemocao('esse evento', '#formDestroyEvento')">Remover</button>
+                                                                <button type="button" class="btn btn-danger" onclick="confirmAndSetId('formDestroyEvento', 'idEvento', <?php echo $evento['id']; ?>, 'esse evento');confirmarRemocao('esse evento', '#formDestroyEvento')"><i class="fas fa-trash me-1"></i> Remover</button>
                                                             </form>
                                                         </td>
                                                     <?php
@@ -347,9 +347,9 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                         // Exibe o botão de edição somente se o nível for 3
                                                     ?>
                                                         <td class="text-center">
-                                                            <a href="home.php?sisco=editLiberacao&idLiberacao=<?php echo $liberacao['id']; ?>" class="btn btn-primary">Editar</a>
+                                                            <a href="home.php?sisco=editLiberacao&idLiberacao=<?php echo $liberacao['id']; ?>" class="btn btn-primary"><i class="fas fa-edit me-1"></i> Editar</a>
                                                             <form action="../operations/destroyLiberacao.php" method="post" style="display: inline;" id="formDestroyLiberacao">
-                                                                <button type="button" class="btn btn-danger" onclick="confirmAndSetId('formDestroyLiberacao', 'idLiberacao', <?php echo $liberacao['id']; ?>, 'esse evento');">Remover</button>
+                                                                <button type="button" class="btn btn-danger" onclick="confirmAndSetId('formDestroyLiberacao', 'idLiberacao', <?php echo $liberacao['id']; ?>, 'esse evento');"><i class="fas fa-trash me-1"></i> Remover</button>
                                                             </form>
                                                         </td>
                                                     <?php

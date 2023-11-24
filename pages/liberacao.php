@@ -148,7 +148,7 @@ $totalPaginas = ceil($totalRegistros / $registrosPorPagina);
                                     <label for="inputObservacoes" class="form-label">Descrição</label>
                                     <textarea class="form-control" id="inputObservacoes" name="liberacao_observacao" placeholder="Descreva a liberação." required></textarea>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Enviar</button>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-1"></i> Enviar</button>
                             </div>
                         </div>
                     </form>

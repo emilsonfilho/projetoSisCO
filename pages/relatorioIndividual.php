@@ -61,7 +61,7 @@ if (isset($_GET['idTurma'])) {
         <div class="card-body">
           <div class="card-title d-flex justify-content-between align-items-center">
             <h5>Exibindo relatório de <?php echo $serieTurma; ?> - <?php echo $cursoNome; ?></h5>
-            <a href="javascript:history.back()" class="btn btn-primary d-inline">Voltar</a>
+            <a href="javascript:history.back()" class="btn btn-primary d-inline"><i class="fas fa-arrow-left me-1"></i> Voltar</a>
           </div>
           <!-- <h5 class="card-title">Exibindo relatório de <?php echo $serieTurma; ?> - <?php echo $cursoNome; ?></h5> -->
           <div class="table-responsive">

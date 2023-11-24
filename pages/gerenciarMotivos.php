@@ -69,7 +69,7 @@ include_once('../config/conexao.php');
                             </tbody>
                         </table>
                     </div>
-                    <a href="home.php?sisco=cadOcorrenciaMotivo" class="btn btn-primary">Novo Motivo Ocorrência</a>
+                    <a href="home.php?sisco=cadOcorrenciaMotivo" class="btn btn-primary"><i class="fas fa-plus me-1"></i> Novo Motivo Ocorrência</a>
                 </div>
             </div>
         </div>
@@ -114,7 +114,7 @@ include_once('../config/conexao.php');
                             </tbody>
                         </table>
                     </div>
-                    <a href="home.php?sisco=cadEventoMotivo" class="btn btn-primary">Novo Motivo de Evento</a>
+                    <a href="home.php?sisco=cadEventoMotivo" class="btn btn-primary"><i class="fas fa-plus me-1"></i> Novo Motivo de Evento</a>
                 </div>
             </div>
         </div>
