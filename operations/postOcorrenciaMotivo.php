@@ -38,6 +38,6 @@ try {
         $msg = urlencode("Ocorreu algum erro ao tentar registrar o motivo de ocorrência.");
         header("Location: ../pages/home.php?sisco=gerenciarMotivos&msgType=$msgType&msg=$msg");
     }
-} catch (\Throwable $th) {
-    //throw $th;
+} catch (PDOException $e) {
+    echo $e->getMessage();
 }

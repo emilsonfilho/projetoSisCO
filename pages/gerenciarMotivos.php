@@ -114,6 +114,7 @@ include_once('../config/conexao.php');
                             </tbody>
                         </table>
                     </div>
+                    <a href="home.php?sisco=cadEventoMotivo" class="btn btn-primary">Novo Motivo de Evento</a>
                 </div>
             </div>
         </div>

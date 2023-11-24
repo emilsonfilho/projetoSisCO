@@ -64,6 +64,8 @@ if (isset($_GET['sisco'])) {
     }
   } elseif ($acao == 'cadOcorrenciaMotivo') {
     include_once('cadOcorrenciaMotivo.php');
+  } elseif ($acao == 'cadEventoMotivo') {
+    include_once('cadEventoMotivo.php');
   }
 } else {
   header("Location: home.php?sisco=cadOcorrencia");
