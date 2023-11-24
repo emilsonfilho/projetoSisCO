@@ -20,8 +20,7 @@ try {
 
     if ($stmtDeleteMotivo->rowCount() > 0) {
         $msgType = urlencode("success");
-        // $msg = urlencode("Motivo de ocorrência deletado com sucesso!");
-        $msg = urlencode($id);
+        $msg = urlencode("Motivo de ocorrência deletado com sucesso!");
         header("Location: ../pages/home.php?sisco=gerenciarMotivos&msgType=$msgType&msg=$msg");    
     } else {
         $msgType = urlencode("error");

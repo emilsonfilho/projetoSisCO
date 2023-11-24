@@ -8,32 +8,31 @@ if (!isset($_SESSION['loginuser'])) {
     exit;
 }
 
-$id = $_GET['id'];
-var_dump($id);
-exit;
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $id = $_POST['id'];
+    $queryCheckOcorrencias = "SELECT COUNT(*) FROM tb_sisco_ocorrencia WHERE ocorrencia_idMotivo = :id";
 
-$queryCheckOcorrencias = "SELECT COUNT(*) FROM tb_sisco_ocorrencia WHERE ocorrencia_idMotivo = :id";
+    try {
+        $stmtCheck = $conexao->prepare($queryCheckOcorrencias);
+        $stmtCheck->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmtCheck->execute();
 
-try {
-    $stmtCheck = $conexao->prepare($queryCheckOcorrencias);
-    $stmtCheck->bindValue(':id', $id, PDO::PARAM_INT);
-    $stmtCheck->execute();
+        $rowCount = $stmtCheck->fetchColumn();
 
-    $rowCount = $stmtCheck->fetchColumn();
-
-    if ($rowCount > 0) {
-        echo "<script>
-                var userConfirmed = confirm('Existem ocorrências associadas a este motivo. Deseja excluir as ocorrências junto com o motivo?');
-                if (userConfirmed) {
-                    window.location.href = 'destroyOcorrenciaMotivo.php?id=$id&deleteOcorrencias=true';
-                } else {
-                    window.location.href = '../pages/home.php?sisco=gerenciarMotivos';
-                }
-              </script>";
-    } else {
-        // Se não houver ocorrências, prosseguir com a exclusão normalmente
-        header("Location: destroyOcorrenciaMotivo.php?id=$id");
+        if ($rowCount > 0) {
+            echo "<script>
+                    var userConfirmed = confirm('Existem ocorrências associadas a este motivo. Deseja excluir as ocorrências junto com o motivo?');
+                    if (userConfirmed) {
+                        window.location.href = 'destroyOcorrenciaMotivo.php?id=$id&deleteOcorrencias=true';
+                    } else {
+                        window.location.href = '../pages/home.php?sisco=gerenciarMotivos';
+                    }
+                  </script>";
+        } else {
+            // Se não houver ocorrências, prosseguir com a exclusão normalmente
+            header("Location: destroyOcorrenciaMotivo.php?id=$id");
+        }
+    } catch (PDOException $e) {
+        echo $e->getMessage();
     }
-} catch (PDOException $e) {
-    echo $e->getMessage();
 }

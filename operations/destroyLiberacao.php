@@ -7,44 +7,47 @@ if (!isset($_SESSION['loginuser'])) {
     exit;
 }
 
-$id = $_POST['idLiberacao'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-try {
-    $selectDiscenteId = "SELECT tb_jmf_discente.discente_matricula FROM tb_sisco_liberacao JOIN tb_jmf_discente ON tb_sisco_liberacao.liberacao_idDiscente = tb_jmf_discente.discente_matricula WHERE tb_sisco_liberacao.liberacao_id = :id;";
-    $stmt = $conexao->prepare($selectDiscenteId);
-    $stmt->bindParam(':id', $id, PDO::PARAM_INT);
-    $stmt->execute();
+    $id = $_POST['idLiberacao'];
 
-    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    try {
+        $selectDiscenteId = "SELECT tb_jmf_discente.discente_matricula FROM tb_sisco_liberacao JOIN tb_jmf_discente ON tb_sisco_liberacao.liberacao_idDiscente = tb_jmf_discente.discente_matricula WHERE tb_sisco_liberacao.liberacao_id = :id;";
+        $stmt = $conexao->prepare($selectDiscenteId);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        $stmt->execute();
 
-    if ($result) {
-        $discenteId = $result['discente_matricula'];
-        $deleteLiberacao = "DELETE FROM tb_sisco_liberacao WHERE liberacao_id = :id";
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        try {
-            $stmtDelete = $conexao->prepare($deleteLiberacao);
-            $stmtDelete->bindValue(':id', $id, PDO::PARAM_INT);
-            $stmtDelete->execute();
+        if ($result) {
+            $discenteId = $result['discente_matricula'];
+            $deleteLiberacao = "DELETE FROM tb_sisco_liberacao WHERE liberacao_id = :id";
 
-            $rowCount = $stmtDelete->rowCount();
+            try {
+                $stmtDelete = $conexao->prepare($deleteLiberacao);
+                $stmtDelete->bindValue(':id', $id, PDO::PARAM_INT);
+                $stmtDelete->execute();
 
-            if ($rowCount > 0) {
-                $msgType = urlencode("success");
-                $msg = urlencode("Liberação deletada com sucesso!");
-                header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
-            } else {
-                $msgType = urlencode("error");
-                $msg = urlencode("Falha ao deletar a liberação.");
-                header("Location: ../pages/home.php?sisco=liberacaoe&msgType=$msgType&msg=$msg");
+                $rowCount = $stmtDelete->rowCount();
+
+                if ($rowCount > 0) {
+                    $msgType = urlencode("success");
+                    $msg = urlencode("Liberação deletada com sucesso!");
+                    header("Location: ../pages/home.php?sisco=liberacao&msgType=$msgType&msg=$msg");
+                } else {
+                    $msgType = urlencode("error");
+                    $msg = urlencode("Falha ao deletar a liberação.");
+                    header("Location: ../pages/home.php?sisco=liberacaoe&msgType=$msgType&msg=$msg");
+                }
+            } catch (PDOException $e) {
+                echo $e->getMessage();
             }
-        } catch (PDOException $e) {
-            echo $e->getMessage();
+        } else {
+            $msgType = urlencode("error");
+            $msg = urlencode("Matrícula do discente não encontrada.");
+            header("Location: ../pages/home.php?sisco=liberacao$discenteId&msgType=$msgType&msg=$msg");
         }
-    } else {
-        $msgType = urlencode("error");
-        $msg = urlencode("Matrícula do discente não encontrada.");
-        header("Location: ../pages/home.php?sisco=liberacao$discenteId&msgType=$msgType&msg=$msg");
+    } catch (PDOException $e) {
+        echo $e->getMessage();
     }
-} catch (PDOException $e) {
-    echo $e->getMessage();
 }

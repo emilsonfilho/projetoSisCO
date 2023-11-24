@@ -23,7 +23,8 @@ include_once('../config/conexao.php');
         }
     }
     ?>
-    <script src="../operations/confirmDelete.js"></script>
+    <script src="../operations/confirmAndSetId.js"></script>
+
     <div class="row justify-content-center">
         <div class="col-md-6">
             <div class="card shadow-sm rounded">
@@ -54,9 +55,8 @@ include_once('../config/conexao.php');
                                             <td><?php echo $ocMotivoNome ?></td>
                                             <td>
                                                 <a href="home.php?sisco=editOcorrenciaMotivo&idOcorrenciaMotivo=<?php echo $ocMotivoId ?>" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                                                <form action="../operations/verifyOcorrenciaMotivo.php?id=<?php echo $ocMotivoId ?>" method="post" id="formDestroyOcorrenciaMotivo" style="display: inline;">
-                                                    <input type="hidden" name="idOcorrenciaMotivo" value="<?php echo $ocMotivoId; ?>">
-                                                    <button class="btn btn-danger" type="button" onclick="confirmarRemocao('esse motivo de ocorrência', '#formDestroyOcorrenciaMotivo')"><i class="fas fa-trash"></i></button>
+                                                <form action="../operations/verifyOcorrenciaMotivo.php" method="post" id="formDestroyOcorrenciaMotivo" style="display: inline;">
+                                                    <button class="btn btn-danger" name="removerOcorrenciaMotivo_<?php echo $ocMotivoId; ?>" type="button" onclick="confirmAndSetId('formDestroyOcorrenciaMotivo', 'id', <?php echo $ocMotivoId; ?>, 'esse motivo de ocorrência?')"><i class="fas fa-trash"></i></button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -101,8 +101,7 @@ include_once('../config/conexao.php');
                                             <td>
                                                 <a href="home.php?sisco=editEventoMotivo&idEventoMotivo=<?php echo $eventoMotivoId; ?>" class="btn btn-primary"><i class="fas fa-edit"></i></a>
                                                 <form action="../operations/verifyEventoMotivo.php" method="post" id="formDestroyEventoMotivo" style="display: inline;">
-                                                    <input type="hidden" name="idEventoMotivo" value="<?php echo $eventoMotivoId; ?>">
-                                                    <button class="btn btn-danger" type="button" onclick="confirmarRemocao('esse motivo de evento', '#formDestroyEventoMotivo')"><i class="fas fa-trash"></i></button>
+                                                    <button class="btn btn-danger" type="button" onclick="confirmAndSetId('formDestroyEventoMotivo', 'idEventoMotivo', <?php echo $eventoMotivoId; ?>, 'esse motivo de evento');"><i class="fas fa-trash"></i></button>
                                                 </form>
                                             </td>
                                         </tr>
