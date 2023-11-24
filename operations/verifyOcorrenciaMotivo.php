@@ -8,7 +8,9 @@ if (!isset($_SESSION['loginuser'])) {
     exit;
 }
 
-$id = $_POST['idOcorrenciaMotivo'];
+$id = $_GET['id'];
+var_dump($id);
+exit;
 
 $queryCheckOcorrencias = "SELECT COUNT(*) FROM tb_sisco_ocorrencia WHERE ocorrencia_idMotivo = :id";
 

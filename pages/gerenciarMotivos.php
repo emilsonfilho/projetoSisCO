@@ -54,7 +54,7 @@ include_once('../config/conexao.php');
                                             <td><?php echo $ocMotivoNome ?></td>
                                             <td>
                                                 <a href="home.php?sisco=editOcorrenciaMotivo&idOcorrenciaMotivo=<?php echo $ocMotivoId ?>" class="btn btn-primary"><i class="fas fa-edit"></i></a>
-                                                <form action="../operations/verifyOcorrenciaMotivo.php" method="post" id="formDestroyOcorrenciaMotivo" style="display: inline;">
+                                                <form action="../operations/verifyOcorrenciaMotivo.php?id=<?php echo $ocMotivoId ?>" method="post" id="formDestroyOcorrenciaMotivo" style="display: inline;">
                                                     <input type="hidden" name="idOcorrenciaMotivo" value="<?php echo $ocMotivoId; ?>">
                                                     <button class="btn btn-danger" type="button" onclick="confirmarRemocao('esse motivo de ocorrência', '#formDestroyOcorrenciaMotivo')"><i class="fas fa-trash"></i></button>
                                                 </form>
@@ -69,6 +69,7 @@ include_once('../config/conexao.php');
                             </tbody>
                         </table>
                     </div>
+                    <a href="home.php?sisco=cadOcorrenciaMotivo" class="btn btn-primary">Novo Motivo Ocorrência</a>
                 </div>
             </div>
         </div>
