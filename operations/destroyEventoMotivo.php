@@ -1,23 +1,23 @@
 <?php
 include_once('../config/conexao.php');
 
-$id = $_GET['id'];
+$id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $deleteEventos = isset($_GET['deleteEventos']) ? $_GET['deleteEventos'] : false;
 
-$queryDeleteMotivo = "DELETE FROM tb_sisco_eventomotivo WHERE eventoMotivo_id = :id";
-$queryDeleteEventos = "DELETE FROM tb_sisco_evento WHERE evento_idMotivo = :id";
+$queryDeleteMotivo = "DELETE FROM tb_sisco_eventomotivo WHERE eventoMotivo_id = :motivo_id";
+$queryDeleteEventos = "DELETE FROM tb_sisco_evento WHERE evento_idMotivo = :ocorrenciamotivo_id";
 
 try {
     $conexao->beginTransaction();
 
     if ($deleteEventos) {
         $stmtDeleteEventos = $conexao->prepare($queryDeleteEventos);
-        $stmtDeleteEventos->bindValue(':id', $id, PDO::PARAM_INT);
+        $stmtDeleteEventos->bindValue(':ocorrenciamotivo_id', $id, PDO::PARAM_INT);
         $stmtDeleteEventos->execute();
     }
 
     $stmtDeleteMotivo = $conexao->prepare($queryDeleteMotivo);
-    $stmtDeleteMotivo->bindValue(':id', $id, PDO::PARAM_INT);
+    $stmtDeleteMotivo->bindValue(':motivo_id', $id, PDO::PARAM_INT);
     $stmtDeleteMotivo->execute();
 
     $conexao->commit();

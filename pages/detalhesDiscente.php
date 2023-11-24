@@ -85,13 +85,13 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                         colRetorno.colaborador_nome AS colaborador_retorno_nome
                     FROM 
                        tb_sisco_liberacao
-                    JOIN 
+                    LEFT JOIN 
                        tb_jmf_discente ON tb_sisco_liberacao.liberacao_idDiscente = tb_jmf_discente.discente_matricula
-                    JOIN 
+                    LEFT JOIN 
                        tb_jmf_colaborador colSaida ON tb_sisco_liberacao.liberacao_idColaboradorSaida = colSaida.colaborador_matricula
-                    JOIN 
+                    LEFT JOIN 
                        tb_jmf_colaborador colRetorno ON tb_sisco_liberacao.liberacao_idColaboradorRetorno = colRetorno.colaborador_matricula
-                    JOIN
+                    LEFT JOIN
                         tb_jmf_responsavellegal ON tb_sisco_liberacao.liberacao_idResponsavel = tb_jmf_responsavellegal.responsavelLegal_id
                     WHERE 
                        tb_jmf_discente.discente_matricula = :matricula;
@@ -114,7 +114,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
             $liberacoesFormatadas[$index]['id'] = $liberacao['liberacao_id'];
         }
 ?>
-        <script src="../operations/confirmDelete.js"></script>
+        <script src="../operations/confirmAndSetId.js"></script>
 
         <div class="container">
             <?php
@@ -218,8 +218,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                         <td class="text-center">
                                                             <a href="home.php?sisco=editOcorrencia&idOcorrencia=<?php echo $ocorrencia['id']; ?>" class="btn btn-primary">Editar</a>
                                                             <form action="../operations/destroyOcorrencia.php" method="post" style="display: inline;" id="formDestroyOcorrencia">
-                                                                <input type="hidden" name="idOcorrencia" value="<?php echo $ocorrencia['id']; ?>">
-                                                                <button type="button" class="btn btn-danger" onclick="confirmarRemocao('essa ocorrência', '#formDestroyOcorrencia')">Remover</button>
+                                                                <button type="button" class="btn btn-danger" onclick="confirmAndSetId('formDestroyOcorrencia', 'idOcorrencia', <?php echo $ocorrencia['id']; ?>, 'essa ocorrência');">Remover</button>
                                                             </form>
                                                         </td>
                                                     <?php
@@ -283,8 +282,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                         <td class="text-center">
                                                             <a href="home.php?sisco=editEvento&idEvento=<?php echo $evento['id']; ?>" class="btn btn-primary">Editar</a>
                                                             <form action="../operations/destroyEvento.php" method="post" style="display: inline;" id="formDestroyEvento">
-                                                                <input type="hidden" name="idEvento" value="<?php echo $evento['id']; ?>">
-                                                                <button type="button" class="btn btn-danger" onclick="confirmarRemocao('esse evento', '#formDestroyEvento')">Remover</button>
+                                                                <button type="button" class="btn btn-danger" onclick="confirmAndSetId('formDestroyEvento', 'idEvento', <?php echo $evento['id']; ?>, 'esse evento');confirmarRemocao('esse evento', '#formDestroyEvento')">Remover</button>
                                                             </form>
                                                         </td>
                                                     <?php
@@ -351,8 +349,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                                         <td class="text-center">
                                                             <a href="home.php?sisco=editLiberacao&idLiberacao=<?php echo $liberacao['id']; ?>" class="btn btn-primary">Editar</a>
                                                             <form action="../operations/destroyLiberacao.php" method="post" style="display: inline;" id="formDestroyLiberacao">
-                                                                <input type="hidden" name="idEvento" value="<?php echo $liberacao['id']; ?>">
-                                                                <button type="button" class="btn btn-danger" onclick="confirmarRemocao('esse evento', '#formDestroyLiberacao')">Remover</button>
+                                                                <button type="button" class="btn btn-danger" onclick="confirmAndSetId('formDestroyLiberacao', 'idLiberacao', <?php echo $liberacao['id']; ?>, 'esse evento');">Remover</button>
                                                             </form>
                                                         </td>
                                                     <?php
@@ -364,7 +361,7 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
                                     <?php
                                     } else {
                                     ?>
-                                        <p>O aluno não possui eventos.</p>
+                                        <p>O aluno não possui liberações.</p>
                                     <?php
                                     }
                                     ?>

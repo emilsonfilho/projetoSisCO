@@ -27,7 +27,7 @@ if (isset($_GET['idLiberacao'])) {
 }
 ?>
 
-<script src="../operations/confirmDelete.js"></script>
+<script src="../operations/confirmAndSetId.js"></script>
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-6">
@@ -65,8 +65,7 @@ if (isset($_GET['idLiberacao'])) {
             <a href="javascript:history.back()" class="btn btn-secondary">Voltar</a>
             <a href="home.php?sisco=editLiberacao&idLiberacao=<?php echo $idLiberacao; ?>" class="btn btn-primary">Editar Liberação</a>
             <form action="../operations/destroyLiberacao.php" method="post" id="formDestroyLiberacao" style="display: inline;">
-                <input type="hidden" name="idLiberacao" value="<?php echo $detalhesLiberacao['id'] ?>">
-                <button type="button" class="btn btn-danger" onclick="confirmarRemocao('essa liberação', '#formDestroyLiberacao')">Remover Liberação</button>
+                <button type="button" class="btn btn-danger" onclick="confirmAndSetId('formDestroyLiberacao', 'idLiberacao', <?php echo $detalhesLiberacao['id'] ?>, 'essa liberação'); confirmarRemocao('essa liberação', '#formDestroyLiberacao')">Remover Liberação</button>
             </form>
         </div>
     </div>
