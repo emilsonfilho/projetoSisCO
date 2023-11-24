@@ -25,7 +25,7 @@ include_once('../config/conexao.php');
     ?>
     <script src="../operations/confirmAndSetId.js"></script>
 
-    <div class="row justify-content-center">
+    <div class="row justify-content-center gap-3">
         <div class="col-md-6">
             <div class="card shadow-sm rounded">
                 <div class="card-body">
