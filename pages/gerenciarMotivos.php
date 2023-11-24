@@ -1,7 +1,6 @@
 <?php
 include_once('../config/conexao.php');
 ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-df5m027ofAKlfJ6rRhWBoNmXPTcIlDJFvL+OdSghjZtMiPMRZL7R02GqcfwbSzWl" crossorigin="anonymous">
 
 <div class="container">
     <?php
