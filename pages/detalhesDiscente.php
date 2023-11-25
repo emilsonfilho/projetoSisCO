@@ -137,12 +137,15 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
             ?>
             <div class="row">
                 <div class="col-md-12">
-                    <a href="javascript:history.back()" class="btn btn-primary"><i class="fas fa-arrow-left me-1"></i> Voltar</a>
                     <div class="card shadow-sm rounded">
                         <div class="card-body">
-                            <h3 class="text-center"><?php echo $aluno['discente_nome']; ?></h3>
-                            <h5 class="text-center text-secondary"><?php echo $aluno['turma_serie'] . ' - ' . $aluno['curso_nome']; ?></h5>
-
+                            <div class="card-title d-flex justify-content-between align-items-center">
+                                <div class="content">
+                                    <h3><?php echo $aluno['discente_nome']; ?></h3>
+                                    <h5 class="text-secondary"><?php echo $aluno['turma_serie'] . ' - ' . $aluno['curso_nome']; ?></h5>
+                                </div>
+                                <a href="javascript:history.back()" class="btn btn-primary"><i class="fas fa-arrow-left me-1"></i> Voltar</a>
+                            </div>
                             <div class="mt-4">
                                 <h6>Dados do Aluno</h6>
                                 <div class="row">
