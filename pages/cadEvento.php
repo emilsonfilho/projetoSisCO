@@ -112,7 +112,7 @@ try {
                                     <label for="inputObservacoes" class="form-label">Descrição</label>
                                     <textarea class="form-control" id="inputObservacoes" name="evento_observacao" placeholder="Descreva o evento." required></textarea>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Enviar</button>
+                                <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-1"></i> Enviar</button>
                             </div>
                         </div>
                     </form>

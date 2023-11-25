@@ -1,7 +1,6 @@
 <?php
 include_once('../config/conexao.php');
 ?>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-df5m027ofAKlfJ6rRhWBoNmXPTcIlDJFvL+OdSghjZtMiPMRZL7R02GqcfwbSzWl" crossorigin="anonymous">
 
 <div class="container">
     <?php
@@ -69,7 +68,7 @@ include_once('../config/conexao.php');
                             </tbody>
                         </table>
                     </div>
-                    <a href="home.php?sisco=cadOcorrenciaMotivo" class="btn btn-primary">Novo Motivo Ocorrência</a>
+                    <a href="home.php?sisco=cadOcorrenciaMotivo" class="btn btn-primary"><i class="fas fa-plus me-1"></i> Novo Motivo Ocorrência</a>
                 </div>
             </div>
         </div>
@@ -114,7 +113,7 @@ include_once('../config/conexao.php');
                             </tbody>
                         </table>
                     </div>
-                    <a href="home.php?sisco=cadEventoMotivo" class="btn btn-primary">Novo Motivo de Evento</a>
+                    <a href="home.php?sisco=cadEventoMotivo" class="btn btn-primary"><i class="fas fa-plus me-1"></i> Novo Motivo de Evento</a>
                 </div>
             </div>
         </div>

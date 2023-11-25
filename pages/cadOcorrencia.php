@@ -33,6 +33,8 @@ try {
 }
 ?>
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-df5m027ofAKlfJ6rRhWBoNmXPTcIlDJFvL+OdSghjZtMiPMRZL7R02GqcfwbSzWl" crossorigin="anonymous">
+
 <div class="container">
     <?php
     // Verificar se a mensagem está presente na URL
@@ -107,7 +109,7 @@ try {
                             <label for="inputObservacoes" class="form-label">Descrição</label>
                             <textarea class="form-control" id="inputObservacoes" name="ocorrencia_descricao" placeholder="Descreva a ocorrência." required></textarea>
                         </div>
-                        <button type="submit" class="btn btn-primary">Enviar</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane me-1"></i> Enviar</button>
                     </form>
                 </div>
             </div>
