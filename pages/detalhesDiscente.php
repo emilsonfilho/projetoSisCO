@@ -118,12 +118,10 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
 
         <div class="container">
             <?php
-            // Verificar se a mensagem está presente na URL
             if (isset($_GET['msgType']) && isset($_GET['msg'])) {
                 $msgType = $_GET['msgType'];
                 $msg = $_GET['msg'];
 
-                // Verificar o tipo de mensagem e exibir a mensagem correspondente
                 if ($msgType === 'success') {
                     echo '<div class="alert alert-success alert-dismissible fade show" role="alert">';
                     echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
