@@ -118,12 +118,10 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
 
         <div class="container">
             <?php
-            // Verificar se a mensagem está presente na URL
             if (isset($_GET['msgType']) && isset($_GET['msg'])) {
                 $msgType = $_GET['msgType'];
                 $msg = $_GET['msg'];
 
-                // Verificar o tipo de mensagem e exibir a mensagem correspondente
                 if ($msgType === 'success') {
                     echo '<div class="alert alert-success alert-dismissible fade show" role="alert">';
                     echo '<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>';
@@ -139,12 +137,15 @@ WHERE tb_sisco_ocorrencia.ocorrencia_idDiscente = :matricula";
             ?>
             <div class="row">
                 <div class="col-md-12">
-                    <a href="javascript:history.back()" class="btn btn-primary"><i class="fas fa-arrow-left me-1"></i> Voltar</a>
                     <div class="card shadow-sm rounded">
                         <div class="card-body">
-                            <h3 class="text-center"><?php echo $aluno['discente_nome']; ?></h3>
-                            <h5 class="text-center text-secondary"><?php echo $aluno['turma_serie'] . ' - ' . $aluno['curso_nome']; ?></h5>
-
+                            <div class="card-title d-flex justify-content-between align-items-center">
+                                <div class="content">
+                                    <h3><?php echo $aluno['discente_nome']; ?></h3>
+                                    <h5 class="text-secondary"><?php echo $aluno['turma_serie'] . ' - ' . $aluno['curso_nome']; ?></h5>
+                                </div>
+                                <a href="javascript:history.back()" class="btn btn-primary"><i class="fas fa-arrow-left me-1"></i> Voltar</a>
+                            </div>
                             <div class="mt-4">
                                 <h6>Dados do Aluno</h6>
                                 <div class="row">
